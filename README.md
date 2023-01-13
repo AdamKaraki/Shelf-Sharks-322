@@ -7,7 +7,7 @@ A brief description of what this project does and who it's for
 
 
 ## Authors
-- [Adam Karaki](https://github.com/nlaha)
+- [Nathan Laha](https://github.com/nlaha)
 - [Adam Karaki](https://www.github.com/AdamKaraki)
 ## Color Reference
 
