@@ -1,5 +1,5 @@
 
-# INSERT TEAM NAME
+# Shelf Sharks
 
 You  will  be  developing  a  librarian  assistant  that  helps  a  librarian  manage  common 
 library-management  tasks,  including  user  registration,  book  search,  placing  hold  on  a 
