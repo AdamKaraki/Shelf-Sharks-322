@@ -26,6 +26,7 @@ software for their routine tasks.
 | Adam W | EMPTY |
 | Jaxon | EMPTY |
 | Adam K | EMPTY |
+| Juan I | EMPTY |
 
 
 ## Tech Stack
