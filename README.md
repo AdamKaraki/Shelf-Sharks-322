@@ -18,6 +18,7 @@ software for their routine tasks.
 ## Authors
 - [Nathan Laha](https://github.com/nlaha)
 - [Adam Karaki](https://www.github.com/AdamKaraki)
+- [Jaxon McClelland](https://www.github.com/jaxon-mcclelland)
 ## Color Reference
 
 | Member Name             | Role                                                                |
