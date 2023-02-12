@@ -1,0 +1,16 @@
+version: "3.4"
+name: shelf-sharks
+
+services:
+  frontend:
+    image: shelfsharksfrontend
+    build:
+      context: shelf-sharks-frontend
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+
+  # backend:
+  # back-end goes here
