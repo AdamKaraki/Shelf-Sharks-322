@@ -39,7 +39,14 @@ export default function SharkShell(props) {
           Application footer
         </Footer>
       }
-      header={<SharkHeader setOpened={setOpened} opened={opened} />}
+      header={
+        <SharkHeader
+          colorScheme={props.colorScheme}
+          toggleColorScheme={props.toggleColorScheme}
+          setOpened={setOpened}
+          opened={opened}
+        />
+      }
     >
       {props.children}
     </AppShell>

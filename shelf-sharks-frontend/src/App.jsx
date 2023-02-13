@@ -8,20 +8,36 @@ import {
   Flex,
 } from "@mantine/core";
 import { SpotlightProvider } from "@mantine/spotlight";
+import { ModalsProvider } from "@mantine/modals";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useColorScheme } from "@mantine/hooks";
+import { useState } from "react";
 
 import { IconSearch } from "@tabler/icons";
 
 import SharkShell from "./SharkShell";
-import ActionsWrapper from "./spotlight/ActionsWrapper";
-import BookCard from "./book-view/BookCard";
+import ActionsWrapper from "./Spotlight/ActionsWrapper";
+import Home from "./Pages/Home";
+import CheckIn from "./Pages/CheckIn";
+import CheckOut from "./Pages/CheckOut";
 
 export default function App() {
+  // hook will return either 'dark' or 'light' on client
+  // and always 'light' during ssr as window.matchMedia is not available
+  const preferredColorScheme = useColorScheme();
+  const [colorScheme, setColorScheme] = useState(preferredColorScheme);
+  const toggleColorScheme = (value) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
-    <ColorSchemeProvider>
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
+    >
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
-        theme={{ colorScheme: "dark" }}
+        theme={{ colorScheme }}
       >
         <SpotlightProvider
           shortcut={["mod + Space"]}
@@ -31,59 +47,20 @@ export default function App() {
           searchPlaceholder="Search Library..."
           nothingFoundMessage="Nothing found..."
         >
-          <SharkShell>
-            <Stack>
-              <Stack>
-                <Title order={3} mb="md">
-                  Latest Arrivals
-                </Title>
-                <Flex
-                  miw={500}
-                  direction={{ base: "column", sm: "row" }}
-                  gap={{ base: "sm", sm: "lg" }}
-                  wrap="wrap"
-                >
-                  <BookCard checkedOut={false} numAvailable={12} />
-                </Flex>
-              </Stack>
-              <Stack>
-                <Title order={3} mb="md">
-                  Recent Check-outs
-                </Title>
-                <Flex
-                  miw={500}
-                  direction={{ base: "column", sm: "row" }}
-                  gap={{ base: "sm", sm: "lg" }}
-                  wrap="wrap"
-                >
-                  <BookCard
-                    checkedOut={true}
-                    numAvailable={0}
-                    checkedOutDate={new Date()}
-                    returnDate={new Date("5/10/23")}
-                  />
-                  <BookCard
-                    checkedOut={true}
-                    numAvailable={0}
-                    checkedOutDate={new Date()}
-                    returnDate={new Date("5/10/23")}
-                  />
-                  <BookCard
-                    checkedOut={true}
-                    numAvailable={0}
-                    checkedOutDate={new Date()}
-                    returnDate={new Date("5/10/23")}
-                  />
-                  <BookCard
-                    checkedOut={true}
-                    numAvailable={0}
-                    checkedOutDate={new Date()}
-                    returnDate={new Date("5/10/23")}
-                  />
-                </Flex>
-              </Stack>
-            </Stack>
-          </SharkShell>
+          <ModalsProvider>
+            <BrowserRouter>
+              <SharkShell
+                toggleColorScheme={toggleColorScheme}
+                colorScheme={colorScheme}
+              >
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/check-in" element={<CheckIn />} />
+                  <Route path="/check-out" element={<CheckOut />} />
+                </Routes>
+              </SharkShell>
+            </BrowserRouter>
+          </ModalsProvider>
         </SpotlightProvider>
       </MantineProvider>
     </ColorSchemeProvider>

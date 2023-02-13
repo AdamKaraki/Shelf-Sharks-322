@@ -17,18 +17,19 @@ import { IconBookDownload, IconBookUpload, IconUser } from "@tabler/icons";
 export default function BookCard(props) {
   const theme = useMantineTheme();
   return (
-    <MediaQuery largerThan="sm">
+    <MediaQuery smallerThan="lg" styles={{ maxWidth: "inherit" }}>
       <Card
         shadow="sm"
         p="lg"
         radius="md"
         miw={300}
+        maw={250}
         sx={{ flex: 1 }}
         withBorder
       >
         <Card.Section
           sx={{
-            backgroundColor: theme.colors.dark[5],
+            backgroundColor: theme.backgroundColor,
           }}
         >
           <Center>
