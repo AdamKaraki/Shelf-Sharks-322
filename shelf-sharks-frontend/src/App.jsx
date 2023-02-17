@@ -16,7 +16,7 @@ import { useState } from "react";
 import { IconSearch } from "@tabler/icons";
 
 import SharkShell from "./SharkShell";
-import ActionsWrapper from "./Spotlight/ActionsWrapper";
+import SpotlightWrapper from "./Spotlight/SpotlightWrapper";
 import Home from "./Pages/Home";
 import CheckIn from "./Pages/CheckIn";
 import CheckOut from "./Pages/CheckOut";
@@ -29,6 +29,12 @@ export default function App() {
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
+  const [spotlightPage, setSpotlightPage] = useState(1);
+
+  const loadSpotlightResults = (query) => {
+    // load from api with current spotlightPage
+  };
+
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}
@@ -40,9 +46,10 @@ export default function App() {
         theme={{ colorScheme }}
       >
         <SpotlightProvider
+          onQueryChange={(query) => loadSpotlightResults(query)}
           shortcut={["mod + Space"]}
           actions={[]}
-          actionsWrapperComponent={ActionsWrapper}
+          actionsWrapperComponent={SpotlightWrapper}
           searchIcon={<IconSearch size={18} />}
           searchPlaceholder="Search Library..."
           nothingFoundMessage="Nothing found..."

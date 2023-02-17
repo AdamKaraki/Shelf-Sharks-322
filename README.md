@@ -39,3 +39,21 @@ software for their routine tasks.
 - Vite
 
 **Server:** EMPTY
+
+## Development Setup
+
+### Client
+
+Make sure you have current versions of yarn, nodejs and npm installed. Run the following commands from the repository root.
+
+    cd shelf-sharks-frontend
+
+Install dependencies
+
+    yarn
+
+Start the dev server
+
+    yarn dev
+
+Visit the URL listed in the console output in a browser

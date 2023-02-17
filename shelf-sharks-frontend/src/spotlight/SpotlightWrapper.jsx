@@ -1,6 +1,6 @@
 import { Group, Text, Anchor, Pagination } from "@mantine/core";
 
-export default function SharkActionsWrapper(props) {
+export default function SpotlightWrapper(props) {
   return (
     <div>
       {props.children}
@@ -20,7 +20,11 @@ export default function SharkActionsWrapper(props) {
           <Text size="xs" color="dimmed">
             433 books found
           </Text>
-          <Pagination size="xs" total={21} />
+          <Pagination
+            onChange={(page) => props.onPageChange(page)}
+            size="xs"
+            total={21}
+          />
         </Group>
       </Group>
     </div>
