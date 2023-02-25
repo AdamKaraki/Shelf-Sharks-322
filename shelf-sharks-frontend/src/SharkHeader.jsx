@@ -13,17 +13,24 @@ import {
   Kbd,
   Badge,
 } from "@mantine/core";
-import { useSpotlight } from "@mantine/spotlight";
+import { useSpotlight } from '@mantine/spotlight';
 
-import { IconSearch, IconSun, IconMoonStars } from "@tabler/icons";
+import { IconSearch, IconSun, IconMoonStars } from '@tabler/icons';
+
+import LoginForm from './LoginForm';
 
 export default function SharkHeader(props) {
   const theme = useMantineTheme();
-  const spotlight = useSpotlight();
+  const spotlight = useSpotlight(); // define useSpotlight here
+  const handleOpenLogin = () => {
+    spotlight.openSpotlight(<LoginForm onClose={spotlight.closeSpotlight} />);
+  };  
+
+  
   return (
     <Header height={{ base: 70, md: 70 }} p="md">
-      <Group sx={{ height: "100%" }} px={20} position="apart">
-        <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+      <Group sx={{ height: '100%' }} px={20} position="apart">
+        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
           <Burger
             opened={props.opened}
             onClick={() => props.setOpened((o) => !o)}
@@ -34,12 +41,18 @@ export default function SharkHeader(props) {
         </MediaQuery>
 
         <Anchor href="/" variant="text">
-          <Title order={2} sx={{ fontFamily: "Carter One" }}>
+          <Title order={2} sx={{ fontFamily: 'Carter One' }}>
             Shelf Sharks
           </Title>
         </Anchor>
 
+        
+        
         <Group>
+        <ActionIcon size="xl" title="Login" onClick={handleOpenLogin}>
+          <Text>Test Login</Text>
+        </ActionIcon>
+
           <ActionIcon
             size="xl"
             title="Toggle color scheme"
