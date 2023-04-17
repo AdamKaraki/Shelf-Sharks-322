@@ -1,6 +1,55 @@
+import { useState, useEffect } from "react";
 import { Group, Text, Anchor, Pagination } from "@mantine/core";
+import { useSpotlight } from "@mantine/spotlight";
+import axios from "axios";
 
 export default function SpotlightWrapper(props) {
+  const [bookCount, setBookCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
+  const spotlight = useSpotlight();
+
+  const apiURL = import.meta.env.REACT_APP_API_URL;
+
+  useEffect(() => {
+    if (spotlight.opened) {
+      // clear the spotlight results
+      let action_ids = spotlight.actions.map((action) => action.id);
+      spotlight.removeActions(action_ids);
+
+      let actions = [];
+
+      // query the API for the current search
+      axios
+        .post(`${apiURL}/api/books/search`, {
+          query: spotlight.query,
+          page: page,
+        })
+        .then((res) => {
+          setBookCount(res.data.fullCount);
+          // calculate the number of pages
+          setTotalPages(Math.ceil(res.data.fullCount / 10));
+
+          // add the new results
+          res.data.books.forEach((book) => {
+            actions.push({
+              id: book.id,
+              title: book.title,
+              description: book.author,
+              image: book.image,
+              onClick: () => {
+                spotlight.close();
+                props.history.push(`/books/${book.id}`);
+              },
+            });
+          });
+        });
+
+      // register the actions
+      spotlight.registerActions(actions);
+    }
+  }, [spotlight.query, spotlight.opened, page]);
+
   return (
     <div>
       {props.children}
@@ -18,12 +67,13 @@ export default function SpotlightWrapper(props) {
       >
         <Group position="apart">
           <Text size="xs" color="dimmed">
-            433 books found
+            {bookCount} books found
           </Text>
           <Pagination
-            onChange={(page) => props.onPageChange(page)}
+            page={page}
+            onChange={(page) => setPage(page)}
             size="xs"
-            total={21}
+            total={totalPages}
           />
         </Group>
       </Group>

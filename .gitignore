@@ -3,3 +3,4 @@ Shelf-Sharks.WebApi/obj/*
 Shelf-Sharks.WebApi/out/*
 .vscode/*
 
+node_modules

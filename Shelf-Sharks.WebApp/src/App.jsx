@@ -29,12 +29,6 @@ export default function App() {
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
-  const [spotlightPage, setSpotlightPage] = useState(1);
-
-  const loadSpotlightResults = (query) => {
-    // load from api with current spotlightPage
-  };
-
   return (
     <ColorSchemeProvider
       colorScheme={colorScheme}
@@ -46,7 +40,6 @@ export default function App() {
         theme={{ colorScheme }}
       >
         <SpotlightProvider
-          onQueryChange={(query) => loadSpotlightResults(query)}
           shortcut={["mod + Space"]}
           actions={[]}
           actionsWrapperComponent={SpotlightWrapper}

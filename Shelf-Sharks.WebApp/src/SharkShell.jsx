@@ -27,16 +27,9 @@ export default function SharkShell(props) {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       navbar={<SharkNavbar opened={opened} />}
-      aside={
-        <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-          <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-            <Text>Application sidebar</Text>
-          </Aside>
-        </MediaQuery>
-      }
       footer={
         <Footer height={60} p="md">
-          Application footer
+          Copyright &copy; {new Date().getFullYear()} Shelf Sharks
         </Footer>
       }
       header={
