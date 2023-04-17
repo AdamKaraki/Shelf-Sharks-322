@@ -1,7 +1,22 @@
 import { Stack, Title, Flex } from "@mantine/core";
 import BookCard from "../Books/BookCard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Home(props) {
+  const [latestArrivals, setLatestArrivals] = useState([]);
+  const [recentCheckouts, setRecentCheckouts] = useState([]);
+
+  useEffect(() => {
+    // load recent checkouts and latest arrivals
+    axios.get("/api/books/latest/checkouts").then((response) => {
+      setRecentCheckouts(response.data);
+    });
+    axios.get("/api/books/latest/arrivals").then((response) => {
+      setLatestArrivals(response.data);
+    });
+  }, []);
+
   return (
     <Stack>
       <Stack>
@@ -14,7 +29,19 @@ export default function Home(props) {
           gap={{ base: "sm", sm: "lg" }}
           wrap="wrap"
         >
-          <BookCard checkedOut={false} numAvailable={12} />
+          {latestArrivals.map((book) => {
+            return (
+              <BookCard
+                checkedOut={book.checkedOut}
+                numAvailable={book.numAvailable}
+                description={book.description}
+                title={book.title}
+                author={book.author}
+                isbn={book.isbn}
+                coverUrl={book.coverUrl}
+              />
+            );
+          })}
         </Flex>
       </Stack>
       <Stack>
@@ -27,30 +54,19 @@ export default function Home(props) {
           gap={{ base: "sm", sm: "lg" }}
           wrap="wrap"
         >
-          <BookCard
-            checkedOut={true}
-            numAvailable={0}
-            checkedOutDate={new Date()}
-            returnDate={new Date("5/10/23")}
-          />
-          <BookCard
-            checkedOut={true}
-            numAvailable={0}
-            checkedOutDate={new Date()}
-            returnDate={new Date("5/10/23")}
-          />
-          <BookCard
-            checkedOut={true}
-            numAvailable={0}
-            checkedOutDate={new Date()}
-            returnDate={new Date("5/10/23")}
-          />
-          <BookCard
-            checkedOut={true}
-            numAvailable={0}
-            checkedOutDate={new Date()}
-            returnDate={new Date("5/10/23")}
-          />
+          {recentCheckouts.map((book) => {
+            return (
+              <BookCard
+                checkedOut={book.checkedOut}
+                numAvailable={book.numAvailable}
+                description={book.description}
+                title={book.title}
+                author={book.author}
+                isbn={book.isbn}
+                coverUrl={book.coverUrl}
+              />
+            );
+          })}
         </Flex>
       </Stack>
     </Stack>
