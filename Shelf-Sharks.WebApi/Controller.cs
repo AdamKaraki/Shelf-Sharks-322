@@ -8,13 +8,79 @@ namespace Shelf_Sharks.WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class LibraryController : ControllerBase {
-        private static Catalog bookCatalog = new Catalog();
+        
+        private Catalog bookCatalog;
 
         [HttpGet("/books")]
         public ActionResult<ICollection<Book>> GetBooks()
         {
-            return Ok(Array.Empty<Book>());
+            try 
+            {
+                return Ok(bookCatalog.GetBooks());
+            } 
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+            
         }
+
+        [HttpPost("/checkout")]
+        public ActionResult CheckOutBook([FromBody] int isbn)
+        {
+            try 
+            {
+                bookCatalog.CheckOutBook(isbn);
+                return Ok();
+            } 
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("/return")]
+        public ActionResult ReturnBook([FromBody] int isbn)
+        {
+            try {
+                bookCatalog.ReturnBook(isbn);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("/add")]
+        public ActionResult AddBook([FromBody] int isbn)
+        {
+            try {
+               bookCatalog.AddBook(isbn);
+               return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("/remove")]
+        public ActionResult RemoveBook([FromBody] int isbn)
+        {
+            try {
+               bookCatalog.RemoveBook(isbn);
+               return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+
     }
+
+
     
 }
