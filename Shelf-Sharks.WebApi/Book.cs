@@ -2,8 +2,20 @@ using System;
 
 namespace Shelf_Sharks.Models
 {
+    /// <summary>
+    /// Represents a single book in the library catalog
+    /// </summary>
     public class Book
-    {
+    {   
+        /// <summary>
+        /// Constructor for adding a new book that isn't in the catalog.
+        /// Without using the Google Books API
+        /// </summary>
+        /// <param name="author">The book's author</param>
+        /// <param name="title">The book's title</param>
+        /// <param name="description">A short description of the book</param>
+        /// <param name="isbn">The book's ISBN</param>
+        /// <param name="checkoutStatus">Has the book been checked out?</param>
         public Book(
             string author,
             string title,
@@ -14,15 +26,60 @@ namespace Shelf_Sharks.Models
                 Title = title;
                 Description = description;
                 ISBN = isbn;
-                isCheckedOut = checkoutStatus;
-                uuid = Guid.NewGuid();
+                IsCheckedOut = checkoutStatus;
+                UUID = Guid.NewGuid();
         }
-        public string Author { get; init;}
-        public string Title { get; init; }
-        public string Description { get; init; }
+
+        /// <summary>
+        /// Constructor for adding a new book that isn't in the catalog. 
+        /// Will search Google books API for a matching ISBN and populate
+        /// </summary>
+        /// <param name="isbn">the ISBN number of the book</param>
+        public Book(
+            int isbn
+        )
+        {
+            ISBN = isbn;
+            UUID = Guid.NewGuid();
+            IsCheckedOut = false;
+
+            // fetch other data from google books service
+            Google.Apis.Books.v1.Data.Volumes result =
+                Catalog.BooksService.Volumes.List(isbn.ToString()).Execute();
+
+            if (result != null && result.Items != null)
+            {
+                // get first book from list of results for ISBN
+                Google.Apis.Books.v1.Data.Volume volume = result.Items.First();
+
+                if (volume != null)
+                {
+                    // set book properties
+                    // one or more of these might be null.
+                    // If we're at this point in the code, we shouldn't be showing
+                    // an error to the user, so we can just use a default value
+                    Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
+                    Title = volume.VolumeInfo.Title ?? "Unknown Title";
+                    Description = volume.VolumeInfo.Description ?? "Description not available.";
+                    CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+                }
+            }
+        }
+
+        public string? Author { get; init;}
+        public string? Title { get; init; }
+        public string? Description { get; init; }
         public int ISBN { get; init; }
-        public bool isCheckedOut { get; set; }
-        public Guid uuid { get; init; }
+        public bool IsCheckedOut { get; set; }
+        public string? CoverURL { get; init; }
+        public Guid UUID { get; init; }
+        public DateTime DateAdded { get; init; } = DateTime.Now;
+
+        // TODO: we need another class or something here to represent 
+        // TODO: check-out details, having a check-out and return date 
+        // TODO: when the book isn't actually checked out doesn't make sense
+        // TODO: so we should store an object that can be null when the book isn't
+        // TODO: checked out.
     }
 
 }
