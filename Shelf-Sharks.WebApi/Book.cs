@@ -61,7 +61,12 @@ namespace Shelf_Sharks.Models
                     Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
                     Title = volume.VolumeInfo.Title ?? "Unknown Title";
                     Description = volume.VolumeInfo.Description ?? "Description not available.";
-                    CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+                    if (volume.VolumeInfo.ImageLinks != null)
+                    {
+                        CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+                    } else {
+                        CoverURL = "Unknown";
+                    }
                 }
             }
         }
