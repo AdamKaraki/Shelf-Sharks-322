@@ -9,7 +9,7 @@ namespace Shelf_Sharks.WebApi.Controllers
     [ApiController]
     public class LibraryController : ControllerBase {
         
-        private Catalog bookCatalog;
+        private Catalog bookCatalog = new Catalog();
 
         [HttpGet("/books")]
         public ActionResult<ICollection<Book>> GetBooks()
