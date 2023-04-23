@@ -37,6 +37,16 @@
         "package": "${workspaceFolder}/shelf-sharks-frontend/package.json",
         "enableDebugging": true
       }
-    }
+    },
+    {
+      "label": "dotnet-build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+          "build",
+          "${workspaceFolder}/Shelf-Sharks.WebApi/Shelf-Sharks.WebApi.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+  }
   ]
 }

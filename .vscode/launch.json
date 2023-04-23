@@ -4,7 +4,7 @@
       "name": ".NET Core Launch (web)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
+      "preLaunchTask": "dotnet-build",
       "program": "${workspaceFolder}/Shelf-Sharks.WebApi/bin/Debug/net7.0/Shelf-Sharks.WebApi.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
