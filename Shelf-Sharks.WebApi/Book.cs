@@ -59,12 +59,7 @@ namespace Shelf_Sharks.Models
                     Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
                     Title = volume.VolumeInfo.Title ?? "Unknown Title";
                     Description = volume.VolumeInfo.Description ?? "Description not available.";
-                    if (volume.VolumeInfo.ImageLinks != null)
-                    {
-                        CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
-                    } else {
-                        CoverURL = "Unknown";
-                    }
+                    CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
                 }
             }
         }
@@ -79,7 +74,7 @@ namespace Shelf_Sharks.Models
             DateCheckedOut = DateTime.Now;
             DateReturnBy = DateTime.Now.AddDays(14);
         }  
-
+        private int Id { get; set; }
         public string? Author { get; init;}
         public string? Title { get; init; }
         public string? Description { get; init; }

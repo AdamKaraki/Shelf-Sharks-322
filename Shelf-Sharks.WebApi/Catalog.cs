@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Google.Apis.Books.v1;
 using Google.Apis.Services;
+using Shelf_Sharks.WebApi.Database;
 
 namespace Shelf_Sharks.Models
 {
@@ -10,7 +11,9 @@ namespace Shelf_Sharks.Models
         /// Default constructor
         /// </summary>
         public Catalog() {
-            Books = new Dictionary<Int64, Book>();
+            //Books = new Dictionary<Int64, Book>();
+            var context = new LibraryContext();
+            _libraryAccessor = new LibraryAccessor(context);
 
             // initialize google books service
             // with API key
@@ -27,8 +30,8 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <returns>Returns an array of book objects</returns>
         public Book[] GetBooks()
-        {
-            return Books.Values.ToArray();
+        { 
+            return _libraryAccessor.GetBooks().ToArray();
         }
 
         /// <summary>
@@ -37,11 +40,14 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
         public void CheckOutBook(Int64 isbn)
         {
+
+            /*
             if(!Books.ContainsKey(isbn)) 
             {
                 throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
             } 
             Books[isbn].CheckOut();
+            */
         }
 
         /// <summary>
@@ -51,6 +57,7 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception">Throws when a book isn't found or is not checked out</exception>
         public void ReturnBook(Int64 isbn)
         {
+            /*
             if(!Books.ContainsKey(isbn)) 
             {
                 throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
@@ -60,6 +67,7 @@ namespace Shelf_Sharks.Models
                 throw new System.Exception(string.Format("book with isbn {} is not checked out", isbn));
             }
             Books[isbn].IsCheckedOut = false;
+            */
         }
 
         /// <summary>
@@ -70,7 +78,7 @@ namespace Shelf_Sharks.Models
         {
             // add a book using the isbn only constructor
             // this will trigger a Google Books API call
-            Books.Add(isbn, new Book(isbn));
+            _libraryAccessor.AddBook(new Book(isbn));
         }
 
         /// <summary>
@@ -80,25 +88,18 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception"></exception>
         public void RemoveBook(Int64 isbn)
         {
-            if(!Books.ContainsKey(isbn)) 
-            {
-                throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
-            }
-            else if(Books[isbn].IsCheckedOut)
-            {
-                throw new System.Exception(string.Format("Cannot remove book with isbn {} - already checked out", isbn));
-            }
-            Books.Remove(isbn);
+
         }
 
         /// <summary>
         /// The dictionary containing all books in the catalog
         /// </summary>
-        private static Dictionary<Int64, Book> Books { get; set; }
+        // private static Dictionary<Int64, Book> Books { get; set; }
 
         /// <summary>
         /// The Google Books API service
         /// </summary>
         public static Google.Apis.Books.v1.BooksService BooksService { get; set; }
+        private readonly LibraryAccessor _libraryAccessor;
     }
 }
