@@ -26,7 +26,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/checkout")]
-        public ActionResult CheckOutBook([FromBody] int isbn)
+        public ActionResult CheckOutBook([FromBody] Int64 isbn)
         {
             try 
             {
@@ -40,7 +40,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/return")]
-        public ActionResult ReturnBook([FromBody] int isbn)
+        public ActionResult ReturnBook([FromBody] Int64 isbn)
         {
             try {
                 bookCatalog.ReturnBook(isbn);
@@ -53,7 +53,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/add")]
-        public ActionResult AddBook([FromBody] int isbn)
+        public ActionResult AddBook([FromBody] Int64 isbn)
         {
             try {
                bookCatalog.AddBook(isbn);
@@ -66,7 +66,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/remove")]
-        public ActionResult RemoveBook([FromBody] int isbn)
+        public ActionResult RemoveBook([FromBody] Int64 isbn)
         {
             try {
                bookCatalog.RemoveBook(isbn);

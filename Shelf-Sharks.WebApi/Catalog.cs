@@ -10,7 +10,7 @@ namespace Shelf_Sharks.Models
         /// Default constructor
         /// </summary>
         public Catalog() {
-            Books = new Dictionary<int, Book>();
+            Books = new Dictionary<Int64, Book>();
 
             // initialize google books service
             // with API key
@@ -36,7 +36,7 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <param name="isbn">The ISBN of the book to check out</param>
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
-        public void CheckOutBook(int isbn)
+        public void CheckOutBook(Int64 isbn)
         {
             if(!Books.ContainsKey(isbn)) 
             {
@@ -54,7 +54,7 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <param name="isbn">The ISBN of the book to return</param>
         /// <exception cref="System.Exception">Throws when a book isn't found or is not checked out</exception>
-        public void ReturnBook(int isbn)
+        public void ReturnBook(Int64 isbn)
         {
             if(!Books.ContainsKey(isbn)) 
             {
@@ -71,7 +71,7 @@ namespace Shelf_Sharks.Models
         /// Adds a new book to the catalog
         /// </summary>
         /// <param name="isbn">The ISBN of the book to add</param>
-        public void AddBook(int isbn)
+        public void AddBook(Int64 isbn)
         {
             // add a book using the isbn only constructor
             // this will trigger a Google Books API call
@@ -83,7 +83,7 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <param name="isbn">The ISBN of the book to remove</param>
         /// <exception cref="System.Exception"></exception>
-        public void RemoveBook(int isbn)
+        public void RemoveBook(Int64 isbn)
         {
             if(!Books.ContainsKey(isbn)) 
             {
@@ -99,7 +99,7 @@ namespace Shelf_Sharks.Models
         /// <summary>
         /// The dictionary containing all books in the catalog
         /// </summary>
-        private static Dictionary<int, Book> Books { get; set; }
+        private static Dictionary<Int64, Book> Books { get; set; }
 
         /// <summary>
         /// The Google Books API service

@@ -20,7 +20,7 @@ namespace Shelf_Sharks.Models
             string author,
             string title,
             string description,
-            int isbn,
+            Int64 isbn, // isbn's have 13 digits, which is more than Int32's max val
             bool checkoutStatus = false) {
                 Author = author;
                 Title = title;
@@ -36,7 +36,7 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <param name="isbn">the ISBN number of the book</param>
         public Book(
-            int isbn
+            Int64 isbn
         )
         {
             ISBN = isbn;
@@ -69,7 +69,7 @@ namespace Shelf_Sharks.Models
         public string? Author { get; init;}
         public string? Title { get; init; }
         public string? Description { get; init; }
-        public int ISBN { get; init; }
+        public Int64 ISBN { get; init; }
         public bool IsCheckedOut { get; set; }
         public string? CoverURL { get; init; }
         public Guid UUID { get; init; }
