@@ -1,6 +1,26 @@
 {
   "configurations": [
     {
+      "name": ".NET Core Launch (web)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/Shelf-Sharks.WebApi/bin/Debug/net7.0/Shelf-Sharks.WebApi.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
       "name": "Docker Node.js Launch",
       "type": "docker",
       "request": "launch",
@@ -10,6 +30,7 @@
         "package": "${workspaceFolder}/shelf-sharks-frontend/package.json",
         "localRoot": "${workspaceFolder}/shelf-sharks-frontend"
       }
-    }
+    },
+    
   ]
 }
