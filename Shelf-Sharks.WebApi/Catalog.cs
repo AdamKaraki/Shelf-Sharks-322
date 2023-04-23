@@ -34,7 +34,6 @@ namespace Shelf_Sharks.Models
         /// <summary>
         /// Checks out a book in the catalog
         /// </summary>
-        /// <param name="isbn">The ISBN of the book to check out</param>
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
         public void CheckOutBook(Int64 isbn)
         {
@@ -42,11 +41,7 @@ namespace Shelf_Sharks.Models
             {
                 throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
             } 
-            else if(Books[isbn].IsCheckedOut)
-            {
-                throw new System.Exception(string.Format("book with isbn {} is already checked out", isbn));
-            }
-            Books[isbn].IsCheckedOut = true;
+            Books[isbn].CheckOut();
         }
 
         /// <summary>

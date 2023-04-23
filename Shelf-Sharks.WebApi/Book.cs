@@ -35,9 +35,7 @@ namespace Shelf_Sharks.Models
         /// Will search Google books API for a matching ISBN and populate
         /// </summary>
         /// <param name="isbn">the ISBN number of the book</param>
-        public Book(
-            Int64 isbn
-        )
+        public Book(Int64 isbn)
         {
             ISBN = isbn;
             UUID = Guid.NewGuid();
@@ -66,6 +64,17 @@ namespace Shelf_Sharks.Models
             }
         }
 
+        public void CheckOut()
+        {
+            if(IsCheckedOut == true) 
+            {
+                throw new System.Exception(string.Format("book with isbn {} is already checked out", ISBN));
+            }
+            IsCheckedOut = true;
+            DateCheckedOut = DateTime.Now;
+            DateReturnBy = DateTime.Now.AddDays(14);
+        }  
+
         public string? Author { get; init;}
         public string? Title { get; init; }
         public string? Description { get; init; }
@@ -74,12 +83,9 @@ namespace Shelf_Sharks.Models
         public string? CoverURL { get; init; }
         public Guid UUID { get; init; }
         public DateTime DateAdded { get; init; } = DateTime.Now;
-
-        // TODO: we need another class or something here to represent 
-        // TODO: check-out details, having a check-out and return date 
-        // TODO: when the book isn't actually checked out doesn't make sense
-        // TODO: so we should store an object that can be null when the book isn't
-        // TODO: checked out.
+        public DateTime DateCheckedOut { get; set; }
+        public DateTime DateReturnBy { get; set; }
+        
     }
 
 }
