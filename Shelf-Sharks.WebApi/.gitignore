@@ -2,6 +2,7 @@ bin
 obj
 out
 Packages
-.db
-.db-shm
-.db-wal
+library.db
+*.db
+*.db-shm
+*.db-wal
