@@ -28,7 +28,7 @@ namespace Shelf_Sharks.WebApi
                 options.AddPolicy(name: AllowWebAppOrigin,
                     policy =>
                     {
-                        policy.WithOrigins(webapp_url);
+                        policy.WithOrigins(webapp_url).AllowAnyHeader().AllowAnyMethod();
                     });
             });
 
