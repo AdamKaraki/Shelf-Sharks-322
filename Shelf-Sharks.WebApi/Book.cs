@@ -55,7 +55,7 @@ namespace Shelf_Sharks.Models
             if (result != null && result.Items != null)
             {
                 // get first book from list of results for ISBN
-                Google.Apis.Books.v1.Data.Volume volume = result.Items.First();
+                Google.Apis.Books.v1.Data.Volume volume = result.Items.FirstOrDefault();
 
                 if (volume != null)
                 {
@@ -66,7 +66,7 @@ namespace Shelf_Sharks.Models
                     Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
                     Title = volume.VolumeInfo.Title ?? "Unknown Title";
                     Description = volume.VolumeInfo.Description ?? "Description not available.";
-                    CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+                    CoverURL = volume.VolumeInfo.ImageLinks?.Thumbnail ?? "Unknown";
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace Shelf_Sharks.Models
             DateCheckedOut = DateTime.Now;
             DateReturnBy = DateTime.Now.AddDays(14);
         }
-        
+
         public int Id { get; set; }
         public string? Author { get; init;}
         public string? Title { get; init; }

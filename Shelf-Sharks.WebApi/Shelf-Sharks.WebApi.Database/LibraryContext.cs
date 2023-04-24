@@ -10,13 +10,13 @@ namespace Shelf_Sharks.WebApi.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=library.db");
+            optionsBuilder.UseSqlite("Data Source=Shelf-Sharks.WebApi/library.db");
         }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>(entity => {
-                entity.ToTable("Books");
+                entity.ToTable<Book>("Books");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.ISBN).IsRequired();
