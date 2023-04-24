@@ -20,7 +20,11 @@ namespace Shelf_Sharks.WebApi.Database
         {
             return _context.Books.Where(book => book.ISBN == isbn).FirstOrDefault();
         }
-        
+
+        public Book[] GetRecentlyCheckedOut()
+        {
+            return _context.Books.Where(book => book.DateCheckedOut != DateTime.UnixEpoch).OrderBy(book => book.DateCheckedOut).Take(5).ToArray();
+        }
         public void AddBook(Book book)
         {
             _context.Books.Add(book);
