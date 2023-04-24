@@ -20,6 +20,7 @@ import SpotlightWrapper from "./Spotlight/SpotlightWrapper";
 import Home from "./Pages/Home";
 import CheckIn from "./Pages/CheckIn";
 import CheckOut from "./Pages/CheckOut";
+import Book from "./Pages/Book";
 
 export default function App() {
   // hook will return either 'dark' or 'light' on client
@@ -57,6 +58,7 @@ export default function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/check-in" element={<CheckIn />} />
                   <Route path="/check-out" element={<CheckOut />} />
+                  <Route path="/book/:book_uuid" element={<Book />} />
                 </Routes>
               </SharkShell>
             </BrowserRouter>

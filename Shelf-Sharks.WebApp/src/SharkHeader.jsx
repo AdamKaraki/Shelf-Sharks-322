@@ -14,12 +14,15 @@ import {
   Badge,
 } from "@mantine/core";
 import { useSpotlight } from "@mantine/spotlight";
+import { useNavigate } from "react-router-dom";
 
 import { IconSearch, IconSun, IconMoonStars } from "@tabler/icons";
 
 export default function SharkHeader(props) {
   const theme = useMantineTheme();
   const spotlight = useSpotlight();
+  const navigate = useNavigate();
+
   return (
     <Header height={{ base: 70, md: 70 }} p="md">
       <Group sx={{ height: "100%" }} px={20} position="apart">
@@ -33,7 +36,12 @@ export default function SharkHeader(props) {
           />
         </MediaQuery>
 
-        <Anchor href="/" variant="text">
+        <Anchor
+          onClick={() => {
+            navigate(`/`);
+          }}
+          variant="text"
+        >
           <Title order={2} sx={{ fontFamily: "Carter One" }}>
             Shelf Sharks
           </Title>

@@ -12,7 +12,6 @@ export default function Home(props) {
 
   useEffect(() => {
     axios.get(`${apiURL}/books`).then((response) => {
-      console.log(response.data);
       setBooks(response.data);
     });
     // load recent checkouts and latest arrivals

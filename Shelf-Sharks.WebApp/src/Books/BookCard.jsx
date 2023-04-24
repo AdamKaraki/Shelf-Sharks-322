@@ -29,7 +29,8 @@ export default function BookCard(props) {
   const apiURL = import.meta.env.VITE_API_URL;
 
   const formatDescription = (description, maxWords) => {
-    if (description.length > maxWords) {
+    let words = description.split(" ");
+    if (words.length > maxWords) {
       return description.split(" ").slice(0, maxWords).join(" ") + "...";
     } else {
       return description;
@@ -124,7 +125,7 @@ export default function BookCard(props) {
                 color="blue"
                 fullWidth
                 onClick={() => {
-                  navigate(`/books/${book.uuid}`);
+                  navigate(`/book/${book.uuid}`);
                 }}
               >
                 Learn More

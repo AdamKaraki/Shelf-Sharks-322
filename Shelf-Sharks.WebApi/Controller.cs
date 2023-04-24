@@ -7,32 +7,46 @@ namespace Shelf_Sharks.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LibraryController : ControllerBase {
-        
+    public class LibraryController : ControllerBase
+    {
+
         private Catalog bookCatalog = new Catalog();
 
         [HttpGet("/books")]
         public ActionResult<ICollection<Book>> GetBooks()
         {
-            try 
+            try
             {
                 return Ok(bookCatalog.GetBooks());
-            } 
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error: {ex.Message}");
             }
-            
+
+        }
+
+        [HttpGet("/book/{uuid}")]
+        public ActionResult<Book> GetBook([FromRoute] Guid uuid)
+        {
+            try
+            {
+                return Ok(bookCatalog.GetBook(uuid));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
         }
 
         [HttpPost("/checkout")]
-        public ActionResult CheckOutBook([FromBody] Int64 isbn)
+        public ActionResult CheckOutBook([FromBody] Guid uuid)
         {
-            try 
+            try
             {
-                bookCatalog.CheckOutBook(isbn);
+                bookCatalog.CheckOutBook(uuid);
                 return Ok();
-            } 
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error: {ex.Message}");
@@ -40,10 +54,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/return")]
-        public ActionResult ReturnBook([FromBody] Int64 isbn)
+        public ActionResult ReturnBook([FromBody] Guid uuid)
         {
-            try {
-                bookCatalog.ReturnBook(isbn);
+            try
+            {
+                bookCatalog.ReturnBook(uuid);
                 return Ok();
             }
             catch (Exception ex)
@@ -55,9 +70,10 @@ namespace Shelf_Sharks.WebApi.Controllers
         [HttpPost("/add")]
         public ActionResult AddBook([FromBody] Int64 isbn)
         {
-            try {
-               bookCatalog.AddBook(isbn);
-               return Ok();
+            try
+            {
+                bookCatalog.AddBook(isbn);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -68,9 +84,10 @@ namespace Shelf_Sharks.WebApi.Controllers
         [HttpPost("/remove")]
         public ActionResult RemoveBook([FromBody] Int64 isbn)
         {
-            try {
-               bookCatalog.RemoveBook(isbn);
-               return Ok();
+            try
+            {
+                bookCatalog.RemoveBook(isbn);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -82,5 +99,5 @@ namespace Shelf_Sharks.WebApi.Controllers
     }
 
 
-    
+
 }

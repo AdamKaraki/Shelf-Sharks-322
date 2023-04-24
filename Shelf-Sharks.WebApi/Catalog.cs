@@ -10,7 +10,8 @@ namespace Shelf_Sharks.Models
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Catalog() {
+        public Catalog()
+        {
             //Books = new Dictionary<Int64, Book>();
             var context = new LibraryContext();
             _libraryAccessor = new LibraryAccessor(context);
@@ -20,8 +21,8 @@ namespace Shelf_Sharks.Models
             BooksService = new BooksService(
             new BaseClientService.Initializer
             {
-                    ApplicationName = "ShelfSharks",
-                    ApiKey = System.Environment.GetEnvironmentVariable("GOOGLE_BOOKS_API_KEY"),
+                ApplicationName = "ShelfSharks",
+                ApiKey = System.Environment.GetEnvironmentVariable("GOOGLE_BOOKS_API_KEY"),
             });
         }
 
@@ -30,21 +31,32 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <returns>Returns an array of book objects</returns>
         public Book[] GetBooks()
-        { 
+        {
             return _libraryAccessor.GetBooks().ToArray();
+        }
+
+        /// <summary>
+        /// Gets a book by UUID
+        /// </summary>
+        /// <param name="uuid"></param>
+        /// <returns></returns>
+        public Book GetBook(Guid uuid)
+        {
+            return _libraryAccessor.GetBookByUUID(uuid);
         }
 
         /// <summary>
         /// Checks out a book in the catalog
         /// </summary>
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
-        public void CheckOutBook(Int64 isbn)
+        public void CheckOutBook(Guid uuid)
         {
-            var bookToCheckout = _libraryAccessor.GetBookByISBN(isbn);
-            if(bookToCheckout is null)
+            var bookToCheckout = _libraryAccessor.GetBookByUUID(uuid);
+            if (bookToCheckout is null)
             {
                 throw new System.Exception("Book could not be found");
-            } else if(bookToCheckout.IsCheckedOut is true)
+            }
+            else if (bookToCheckout.IsCheckedOut is true)
             {
                 throw new System.Exception("Book is already checked out");
             }
@@ -54,15 +66,16 @@ namespace Shelf_Sharks.Models
         /// <summary>
         /// Returns a book in the catalog
         /// </summary>
-        /// <param name="isbn">The ISBN of the book to return</param>
+        /// <param name="uuid">The UUID of the book to return</param>
         /// <exception cref="System.Exception">Throws when a book isn't found or is not checked out</exception>
-        public void ReturnBook(Int64 isbn)
+        public void ReturnBook(Guid uuid)
         {
-            var bookToCheckout = _libraryAccessor.GetBookByISBN(isbn);
-            if(bookToCheckout is null)
+            var bookToCheckout = _libraryAccessor.GetBookByUUID(uuid);
+            if (bookToCheckout is null)
             {
                 throw new System.Exception("Book could not be found");
-            } else if(bookToCheckout.IsCheckedOut is false)
+            }
+            else if (bookToCheckout.IsCheckedOut is false)
             {
                 throw new System.Exception("Book is not checked out");
             }

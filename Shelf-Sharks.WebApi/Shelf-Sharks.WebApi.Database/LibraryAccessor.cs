@@ -10,15 +10,20 @@ namespace Shelf_Sharks.WebApi.Database
         {
             _context = context;
         }
-        
+
         public List<Book> GetBooks()
         {
             return _context.Books.ToList();
         }
-        
+
         public Book GetBookByISBN(Int64 isbn)
         {
             return _context.Books.Where(book => book.ISBN == isbn).FirstOrDefault();
+        }
+
+        public Book GetBookByUUID(Guid uuid)
+        {
+            return _context.Books.Where(book => book.UUID == uuid).FirstOrDefault();
         }
 
         public Book[] GetRecentlyCheckedOut()
