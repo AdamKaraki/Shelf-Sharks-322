@@ -40,14 +40,15 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
         public void CheckOutBook(Int64 isbn)
         {
-
-            /*
-            if(!Books.ContainsKey(isbn)) 
+            var bookToCheckout = _libraryAccessor.GetBookByISBN(isbn);
+            if(bookToCheckout is null)
             {
-                throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
-            } 
-            Books[isbn].CheckOut();
-            */
+                throw new System.Exception("Book could not be found");
+            } else if(bookToCheckout.IsCheckedOut is true)
+            {
+                throw new System.Exception("Book is already checked out");
+            }
+            _libraryAccessor.CheckOutBook(bookToCheckout);
         }
 
         /// <summary>
@@ -57,17 +58,15 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception">Throws when a book isn't found or is not checked out</exception>
         public void ReturnBook(Int64 isbn)
         {
-            /*
-            if(!Books.ContainsKey(isbn)) 
+            var bookToCheckout = _libraryAccessor.GetBookByISBN(isbn);
+            if(bookToCheckout is null)
             {
-                throw new System.Exception(string.Format("Could not find book with isbn {}", isbn));
-            } 
-            else if(!Books[isbn].IsCheckedOut)
+                throw new System.Exception("Book could not be found");
+            } else if(bookToCheckout.IsCheckedOut is false)
             {
-                throw new System.Exception(string.Format("book with isbn {} is not checked out", isbn));
+                throw new System.Exception("Book is not checked out");
             }
-            Books[isbn].IsCheckedOut = false;
-            */
+            _libraryAccessor.ReturnBook(bookToCheckout);
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception"></exception>
         public void RemoveBook(Int64 isbn)
         {
-
+            _libraryAccessor.RemoveBook(isbn);
         }
 
         /// <summary>

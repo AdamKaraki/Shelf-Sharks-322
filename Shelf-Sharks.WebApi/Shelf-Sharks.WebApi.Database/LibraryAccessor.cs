@@ -26,5 +26,28 @@ namespace Shelf_Sharks.WebApi.Database
             _context.Books.Add(book);
             _context.SaveChanges();
         }
+
+        public void RemoveBook(Int64 isbn)
+        {
+            var bookToRemove = GetBookByISBN(isbn);
+            _context.Remove(bookToRemove);
+            _context.SaveChanges();
+        }
+
+        public void CheckOutBook(Book bookToCheckout)
+        {
+            bookToCheckout.IsCheckedOut = true;
+            bookToCheckout.DateCheckedOut = DateTime.Now;
+            bookToCheckout.DateReturnBy = DateTime.Now.AddDays(14);
+            _context.SaveChanges();
+        }
+
+        public void ReturnBook(Book bookToReturn)
+        {
+            bookToReturn.IsCheckedOut = false;
+            bookToReturn.DateCheckedOut = DateTime.UnixEpoch;
+            bookToReturn.DateReturnBy = DateTime.UnixEpoch;
+            _context.SaveChanges();
+        }
     }
 }
