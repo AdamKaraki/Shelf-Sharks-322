@@ -7,9 +7,10 @@ namespace Shelf_Sharks.Models
     /// Represents a single book in the library catalog
     /// </summary>
     public class Book
-    {  
-        
-        public Book() {
+    {
+
+        public Book()
+        {
             UUID = Guid.NewGuid();
         }
 
@@ -28,13 +29,14 @@ namespace Shelf_Sharks.Models
             string title,
             string description,
             Int64 isbn, // isbn's have 13 digits, which is more than Int32's max val
-            bool checkoutStatus = false) {
-                Author = author;
-                Title = title;
-                Description = description;
-                ISBN = isbn;
-                IsCheckedOut = checkoutStatus;
-                UUID = Guid.NewGuid();
+            bool checkoutStatus = false)
+        {
+            Author = author;
+            Title = title;
+            Description = description;
+            ISBN = isbn;
+            IsCheckedOut = checkoutStatus;
+            UUID = Guid.NewGuid();
         }
 
         /// <summary>
@@ -66,14 +68,21 @@ namespace Shelf_Sharks.Models
                     Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
                     Title = volume.VolumeInfo.Title ?? "Unknown Title";
                     Description = volume.VolumeInfo.Description ?? "Description not available.";
-                    CoverURL = volume.VolumeInfo.ImageLinks?.Thumbnail ?? "Unknown";
+                    if (volume.VolumeInfo.ImageLinks != null)
+                    {
+                        CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+                    }
+                    else
+                    {
+                        CoverURL = "Unknown";
+                    }
                 }
             }
         }
 
         public void CheckOut()
         {
-            if(IsCheckedOut == true) 
+            if (IsCheckedOut == true)
             {
                 throw new System.Exception(string.Format("book with isbn {} is already checked out", ISBN));
             }
@@ -83,7 +92,7 @@ namespace Shelf_Sharks.Models
         }
 
         public int Id { get; set; }
-        public string? Author { get; init;}
+        public string? Author { get; init; }
         public string? Title { get; init; }
         public string? Description { get; init; }
         public Int64 ISBN { get; init; }
@@ -93,7 +102,7 @@ namespace Shelf_Sharks.Models
         public DateTime DateAdded { get; init; } = DateTime.Now;
         public DateTime DateCheckedOut { get; set; }
         public DateTime DateReturnBy { get; set; }
-        
+
     }
 
 }
