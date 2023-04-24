@@ -9,7 +9,7 @@ export default function SpotlightWrapper(props) {
   const [page, setPage] = useState(1);
   const spotlight = useSpotlight();
 
-  const apiURL = import.meta.env.REACT_APP_API_URL;
+  const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (spotlight.opened) {
@@ -33,10 +33,10 @@ export default function SpotlightWrapper(props) {
           // add the new results
           res.data.books.forEach((book) => {
             actions.push({
-              id: book.id,
+              id: book.uuid,
               title: book.title,
               description: book.author,
-              image: book.image,
+              image: book.coverURL,
               onClick: () => {
                 spotlight.close();
                 props.history.push(`/books/${book.id}`);

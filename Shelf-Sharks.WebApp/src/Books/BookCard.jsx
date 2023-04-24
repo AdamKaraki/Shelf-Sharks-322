@@ -12,10 +12,30 @@ import {
   Stack,
   MediaQuery,
 } from "@mantine/core";
-import { IconBookDownload, IconBookUpload, IconUser } from "@tabler/icons";
+import {
+  IconBook,
+  IconBookDownload,
+  IconBookUpload,
+  IconUser,
+} from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function BookCard(props) {
   const theme = useMantineTheme();
+  const [book, setBook] = useState(props.book);
+  let navigate = useNavigate();
+  const apiURL = import.meta.env.VITE_API_URL;
+
+  const formatDescription = (description, maxWords) => {
+    if (description.length > maxWords) {
+      return description.split(" ").slice(0, maxWords).join(" ") + "...";
+    } else {
+      return description;
+    }
+  };
+
   return (
     <MediaQuery smallerThan="lg" styles={{ maxWidth: "inherit" }}>
       <Card
@@ -34,107 +54,103 @@ export default function BookCard(props) {
         >
           <Center>
             <Image
-              src="https://m.media-amazon.com/images/I/41LmPEurOOL.jpg"
-              width={100}
-              alt="Dune"
+              withPlaceholder
+              placeholder={<IconBook size={30} />}
+              height={120}
+              width={80}
+              src={book.coverURL}
+              alt={book.title}
             />
           </Center>
         </Card.Section>
 
         <Group position="apart" mt="md" mb="xs">
-          <Text weight={500}>Dune</Text>
-          {props.numAvailable > 0 ? (
-            <Badge color="green" variant="light">
-              Available ({props.numAvailable})
-            </Badge>
-          ) : (
+          <Text weight={500}>{book.title}</Text>
+          <Text size="md">ISBN: {book.isbn}</Text>
+          {book.isCheckedOut ? (
             <Badge color="red" variant="light">
               Checked Out
+            </Badge>
+          ) : (
+            <Badge color="green" variant="light">
+              Available
             </Badge>
           )}
         </Group>
 
-        {props.checkedOut === false ? (
-          <Text size="sm" color="dimmed">
-            Dune is a 1965 epic science fiction novel by American author Frank
-            Herbert, originally published as two separate serials in Analog
-            magazine.
-          </Text>
-        ) : (
-          <></>
-        )}
+        <Stack justify="space-between" h={200}>
+          <Stack spacing={1}>
+            <Text size="md">Description:</Text>
+            <Text size="sm" color="dimmed">
+              {formatDescription(book.description, 30)}
+            </Text>
+          </Stack>
+          {book.isCheckedOut ? (
+            <>
+              <List>
+                <List.Item
+                  key="dateCheckedOut"
+                  icon={
+                    <ThemeIcon color="orange" size={24} radius="xl">
+                      <IconBookUpload size={16} />
+                    </ThemeIcon>
+                  }
+                >
+                  <Text>
+                    Date checked out:
+                    <b> {book.dateCheckedOut.toLocaleDateString()}</b>
+                  </Text>
+                </List.Item>
 
-        {props.checkedOut ? (
-          <>
-            <List>
-              <List.Item
-                icon={
-                  <ThemeIcon color="orange" size={24} radius="xl">
-                    <IconBookUpload size={16} />
-                  </ThemeIcon>
-                }
-              >
-                <Text>
-                  Date checked out:{" "}
-                  <b>{props.checkedOutDate.toLocaleDateString()}</b>
-                </Text>{" "}
-              </List.Item>
-
-              <List.Item
-                icon={
-                  <ThemeIcon color="green" size={24} radius="xl">
-                    <IconBookDownload size={16} />
-                  </ThemeIcon>
-                }
-              >
-                <Text>
-                  Date to return: <b>{props.returnDate.toLocaleDateString()}</b>
-                </Text>{" "}
-              </List.Item>
-
-              <List.Item
-                icon={
-                  <ThemeIcon color="blue" size={24} radius="xl">
-                    <IconUser size={16} />
-                  </ThemeIcon>
-                }
-              >
-                <Text>
-                  Cardholder: <b>Nathan Laha</b>
-                </Text>
-              </List.Item>
-            </List>
+                <List.Item
+                  key="dateReturnBy"
+                  icon={
+                    <ThemeIcon color="green" size={24} radius="xl">
+                      <IconBookDownload size={16} />
+                    </ThemeIcon>
+                  }
+                >
+                  <Text>
+                    Date to return:{" "}
+                    <b>{book.dateReturnBy.toLocaleDateString()}</b>
+                  </Text>{" "}
+                </List.Item>
+              </List>
+            </>
+          ) : (
             <Button.Group>
               <Button
                 variant="light"
-                color="green"
+                color="blue"
                 fullWidth
-                mt="md"
-                radius="md"
+                onClick={() => {
+                  navigate(`/books/${book.uuid}`);
+                }}
               >
-                Check In
+                Learn More
               </Button>
-              <Button variant="light" color="red" fullWidth mt="md" radius="md">
-                Missing
+              <Button
+                variant="light"
+                color="red"
+                fullWidth
+                onClick={async () => {
+                  // send axios request to check out book
+                  var res = await axios.post(`${apiURL}/checkout`, {
+                    isbn: book.isbn,
+                  });
+                  if (res.status === 200) {
+                    // set isCheckedOut to true
+                    setBook({ ...book, isCheckedOut: true });
+                  } else {
+                    console.error("Error checking out book: " + res.status);
+                  }
+                }}
+              >
+                Check Out
               </Button>
             </Button.Group>
-          </>
-        ) : (
-          <Button.Group>
-            <Button variant="light" color="red" fullWidth mt="md" radius="md">
-              Check Out
-            </Button>
-            <Button
-              variant="light"
-              color="yellow"
-              fullWidth
-              mt="md"
-              radius="md"
-            >
-              Hold
-            </Button>
-          </Button.Group>
-        )}
+          )}
+        </Stack>
       </Card>
     </MediaQuery>
   );

@@ -6,15 +6,22 @@ import axios from "axios";
 export default function Home(props) {
   const [latestArrivals, setLatestArrivals] = useState([]);
   const [recentCheckouts, setRecentCheckouts] = useState([]);
+  const [books, setBooks] = useState([]);
+
+  const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
+    axios.get(`${apiURL}/books`).then((response) => {
+      console.log(response.data);
+      setBooks(response.data);
+    });
     // load recent checkouts and latest arrivals
-    axios.get("/api/books/latest/checkouts").then((response) => {
-      setRecentCheckouts(response.data);
-    });
-    axios.get("/api/books/latest/arrivals").then((response) => {
-      setLatestArrivals(response.data);
-    });
+    // axios.get(`${apiURL}/latest/checkouts`).then((response) => {
+    //   setRecentCheckouts(response.data);
+    // });
+    // axios.get(`${apiURL}/latest/arrivals`).then((response) => {
+    //   setLatestArrivals(response.data);
+    // });
   }, []);
 
   return (
@@ -30,17 +37,7 @@ export default function Home(props) {
           wrap="wrap"
         >
           {latestArrivals.map((book) => {
-            return (
-              <BookCard
-                checkedOut={book.checkedOut}
-                numAvailable={book.numAvailable}
-                description={book.description}
-                title={book.title}
-                author={book.author}
-                isbn={book.isbn}
-                coverUrl={book.coverUrl}
-              />
-            );
+            return <BookCard book={book} />;
           })}
         </Flex>
       </Stack>
@@ -54,18 +51,8 @@ export default function Home(props) {
           gap={{ base: "sm", sm: "lg" }}
           wrap="wrap"
         >
-          {recentCheckouts.map((book) => {
-            return (
-              <BookCard
-                checkedOut={book.checkedOut}
-                numAvailable={book.numAvailable}
-                description={book.description}
-                title={book.title}
-                author={book.author}
-                isbn={book.isbn}
-                coverUrl={book.coverUrl}
-              />
-            );
+          {books.map((book) => {
+            return <BookCard book={book} />;
           })}
         </Flex>
       </Stack>

@@ -24,7 +24,7 @@ import CheckOut from "./Pages/CheckOut";
 export default function App() {
   // hook will return either 'dark' or 'light' on client
   // and always 'light' during ssr as window.matchMedia is not available
-  const preferredColorScheme = useColorScheme();
+  const preferredColorScheme = useColorScheme("dark");
   const [colorScheme, setColorScheme] = useState(preferredColorScheme);
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
