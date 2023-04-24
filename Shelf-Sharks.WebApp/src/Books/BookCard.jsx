@@ -11,6 +11,7 @@ import {
   useMantineTheme,
   Stack,
   MediaQuery,
+  Title,
 } from "@mantine/core";
 import {
   IconBook,
@@ -43,22 +44,26 @@ export default function BookCard(props) {
         shadow="sm"
         p="lg"
         radius="md"
-        miw={300}
-        maw={250}
+        miw={350}
+        maw={props.fullPage ? "100%" : 250}
         sx={{ flex: 1 }}
         withBorder
       >
         <Card.Section
           sx={{
-            backgroundColor: theme.backgroundColor,
+            backgroundColor:
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[8]
+                : theme.colors.gray[0],
           }}
         >
           <Center>
             <Image
               withPlaceholder
-              placeholder={<IconBook size={30} />}
-              height={120}
-              width={80}
+              placeholder={<IconBook size={props.fullPage ? 100 : 30} />}
+              height={props.fullPage ? 300 : 120}
+              width={"auto"}
+              miw={90}
               src={book.coverURL}
               alt={book.title}
             />
@@ -66,8 +71,14 @@ export default function BookCard(props) {
         </Card.Section>
 
         <Group position="apart" mt="md" mb="xs">
-          <Text weight={500}>{book.title}</Text>
-          <Text size="md">ISBN: {book.isbn}</Text>
+          <Stack spacing={0}>
+            {props.fullPage ? (
+              <Title order={3}>{book.title}</Title>
+            ) : (
+              <Text weight={500}>{book.title}</Text>
+            )}
+            <Text size="md">{book.author}</Text>
+          </Stack>
           {book.isCheckedOut ? (
             <Badge color="red" variant="light">
               Checked Out
@@ -81,9 +92,13 @@ export default function BookCard(props) {
 
         <Stack justify="space-between" h={200}>
           <Stack spacing={1}>
-            <Text size="md">Description:</Text>
+            <Text size="md" weight={500}>
+              Description
+            </Text>
             <Text size="sm" color="dimmed">
-              {formatDescription(book.description, 30)}
+              {props.fullPage
+                ? book.description
+                : formatDescription(book.description, 30)}
             </Text>
           </Stack>
           {book.isCheckedOut ? (
@@ -119,37 +134,60 @@ export default function BookCard(props) {
               </List>
             </>
           ) : (
-            <Button.Group>
-              <Button
-                variant="light"
-                color="blue"
-                fullWidth
-                onClick={() => {
-                  navigate(`/book/${book.uuid}`);
-                }}
-              >
-                Learn More
-              </Button>
-              <Button
-                variant="light"
-                color="red"
-                fullWidth
-                onClick={async () => {
-                  // send axios request to check out book
-                  var res = await axios.post(`${apiURL}/checkout`, {
-                    isbn: book.isbn,
-                  });
-                  if (res.status === 200) {
-                    // set isCheckedOut to true
-                    setBook({ ...book, isCheckedOut: true });
-                  } else {
-                    console.error("Error checking out book: " + res.status);
-                  }
-                }}
-              >
-                Check Out
-              </Button>
-            </Button.Group>
+            <Group grow>
+              {!props.fullPage ? (
+                <Button
+                  variant="light"
+                  color="blue"
+                  onClick={() => {
+                    navigate(`/book/${book.uuid}`);
+                  }}
+                >
+                  Learn More
+                </Button>
+              ) : (
+                <></>
+              )}
+              {!props.isCheckedOut ? (
+                <Button
+                  variant="light"
+                  color="red"
+                  onClick={async () => {
+                    // send axios request to check out book
+                    var res = await axios.post(`${apiURL}/checkout`, {
+                      isbn: book.isbn,
+                    });
+                    if (res.status === 200) {
+                      // set isCheckedOut to true
+                      setBook({ ...book, isCheckedOut: true });
+                    } else {
+                      console.error("Error checking out book: " + res.status);
+                    }
+                  }}
+                >
+                  Check Out
+                </Button>
+              ) : (
+                <Button
+                  variant="light"
+                  color="green"
+                  onClick={async () => {
+                    // send axios request to check out book
+                    var res = await axios.post(`${apiURL}/return`, {
+                      isbn: book.isbn,
+                    });
+                    if (res.status === 200) {
+                      // set isCheckedOut to true
+                      setBook({ ...book, isCheckedOut: false });
+                    } else {
+                      console.error("Error returning book: " + res.status);
+                    }
+                  }}
+                >
+                  Return
+                </Button>
+              )}
+            </Group>
           )}
         </Stack>
       </Card>

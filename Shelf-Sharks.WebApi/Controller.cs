@@ -39,6 +39,19 @@ namespace Shelf_Sharks.WebApi.Controllers
             }
         }
 
+        [HttpGet("/stats/num_checked_out")]
+        public ActionResult<int> GetNumCheckedOut()
+        {
+            try
+            {
+                return Ok(bookCatalog.GetNumCheckedOut());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
         [HttpPost("/checkout")]
         public ActionResult CheckOutBook([FromBody] Guid uuid)
         {

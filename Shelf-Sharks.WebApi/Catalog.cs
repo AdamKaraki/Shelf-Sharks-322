@@ -45,6 +45,11 @@ namespace Shelf_Sharks.Models
             return _libraryAccessor.GetBookByUUID(uuid);
         }
 
+        public int GetNumCheckedOut()
+        {
+            return _libraryAccessor.GetNumCheckedOut();
+        }
+
         /// <summary>
         /// Checks out a book in the catalog
         /// </summary>

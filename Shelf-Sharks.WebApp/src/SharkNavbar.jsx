@@ -5,10 +5,23 @@ import {
   IconDatabaseImport,
   IconTrash,
 } from "@tabler/icons";
+import { useState, useEffect } from "react";
 
 import { Routes, Route, Link } from "react-router-dom";
 
 export default function SharkNavbar(props) {
+  const [booksCheckedOut, setBooksCheckedOut] = useState(0);
+  const apiURL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const getBooksCheckedOut = async () => {
+      const response = await fetch(`${apiURL}/stats/num_checked_out`);
+      const data = await response.text();
+      setBooksCheckedOut(data);
+    };
+    getBooksCheckedOut();
+  }, []);
+
   return (
     <Navbar
       p="md"
@@ -25,7 +38,7 @@ export default function SharkNavbar(props) {
               borderRadius: 6,
             }}
             label="Check-in Books"
-            description="12 waiting for check-in"
+            description={booksCheckedOut}
             icon={<IconBookDownload color="lightGreen" />}
           />
         </Link>
@@ -36,7 +49,6 @@ export default function SharkNavbar(props) {
               borderRadius: 6,
             }}
             label="Check-out Books"
-            description="34 books on hold"
             icon={<IconBookUpload color="orange" />}
           />
         </Link>

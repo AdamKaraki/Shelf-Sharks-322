@@ -1,4 +1,15 @@
-import { Stack, Title, Flex, Group, ActionIcon, Text } from "@mantine/core";
+import {
+  Stack,
+  Title,
+  Flex,
+  Group,
+  ActionIcon,
+  Text,
+  Container,
+  Image,
+  Center,
+} from "@mantine/core";
+import { IconBook } from "@tabler/icons";
 import { IconArrowBack } from "@tabler/icons";
 import BookCard from "../Books/BookCard";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +20,7 @@ import { useParams } from "react-router-dom";
 export default function Book(props) {
   const theme = useMantineTheme();
   let { book_uuid } = useParams();
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState(null);
   let navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API_URL;
 
@@ -27,14 +38,28 @@ export default function Book(props) {
   }, []);
 
   return (
-    <Stack>
-      <Group>
+    <Stack spacing="lg">
+      <Group mb="lg">
         <ActionIcon onClick={goBack}>
           <IconArrowBack />
         </ActionIcon>
-        <Title order={3}>{book.title}</Title>
+        {book ? (
+          <Stack spacing={0}>
+            <Title order={3}>{book.title}</Title>
+            <Text order={4} color="dimmed">
+              {book.author}
+            </Text>
+            <Text order={4} color="dimmed">
+              ISBN: {book.isbn}
+            </Text>
+          </Stack>
+        ) : (
+          <Title order={3}>Loading...</Title>
+        )}
       </Group>
-      <Text>{book.description}</Text>
+      <Container size="sm">
+        {book ? <BookCard book={book} fullPage /> : <Text>Loading...</Text>}
+      </Container>
     </Stack>
   );
 }

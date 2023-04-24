@@ -26,6 +26,11 @@ namespace Shelf_Sharks.WebApi.Database
             return _context.Books.Where(book => book.UUID == uuid).FirstOrDefault();
         }
 
+        public int GetNumCheckedOut()
+        {
+            return _context.Books.Where(book => book.IsCheckedOut).Count();
+        }
+
         public Book[] GetRecentlyCheckedOut()
         {
             return _context.Books.Where(book => book.DateCheckedOut != DateTime.UnixEpoch).OrderBy(book => book.DateCheckedOut).Take(5).ToArray();
