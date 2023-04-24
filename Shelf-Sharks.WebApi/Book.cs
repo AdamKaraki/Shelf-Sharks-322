@@ -1,4 +1,5 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shelf_Sharks.Models
 {
@@ -6,7 +7,13 @@ namespace Shelf_Sharks.Models
     /// Represents a single book in the library catalog
     /// </summary>
     public class Book
-    {   
+    {  
+        
+        public Book() {
+            UUID = Guid.NewGuid();
+        }
+
+
         /// <summary>
         /// Constructor for adding a new book that isn't in the catalog.
         /// Without using the Google Books API
@@ -73,8 +80,9 @@ namespace Shelf_Sharks.Models
             IsCheckedOut = true;
             DateCheckedOut = DateTime.Now;
             DateReturnBy = DateTime.Now.AddDays(14);
-        }  
-        private int Id { get; set; }
+        }
+        
+        public int Id { get; set; }
         public string? Author { get; init;}
         public string? Title { get; init; }
         public string? Description { get; init; }
