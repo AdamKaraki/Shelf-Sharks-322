@@ -14,7 +14,8 @@
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       },
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_BOOKS_API_KEY": "AIzaSyAZH4e1ddarr-VjYqapjpjifIYpi3rR230"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
@@ -30,7 +31,6 @@
         "package": "${workspaceFolder}/shelf-sharks-frontend/package.json",
         "localRoot": "${workspaceFolder}/shelf-sharks-frontend"
       }
-    },
-    
+    }
   ]
 }
