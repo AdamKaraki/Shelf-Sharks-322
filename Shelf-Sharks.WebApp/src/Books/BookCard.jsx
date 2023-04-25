@@ -21,7 +21,7 @@ import {
   IconUser,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function BookCard(props) {
@@ -29,6 +29,10 @@ export default function BookCard(props) {
   const [book, setBook] = useState(props.book);
   let navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    setBook(props.book);
+  }, [props.book]);
 
   const formatDescription = (description, maxWords) => {
     let words = description.split(" ");
