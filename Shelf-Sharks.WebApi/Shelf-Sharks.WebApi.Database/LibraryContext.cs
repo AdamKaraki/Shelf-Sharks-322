@@ -10,7 +10,7 @@ namespace Shelf_Sharks.WebApi.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=Shelf-Sharks.WebApi/library.db");
+            optionsBuilder.UseSqlite("Data Source=library.db");
         }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,6 +22,8 @@ namespace Shelf_Sharks.WebApi.Database
                 entity.Property(e => e.ISBN).IsRequired();
                 entity.Property(e => e.IsCheckedOut).IsRequired();
             });
+
+
         }
         
 
