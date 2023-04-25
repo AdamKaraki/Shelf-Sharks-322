@@ -31,6 +31,11 @@ namespace Shelf_Sharks.WebApi.Database
             return _context.Books.Where(book => book.UUID == uuid).FirstOrDefault();
         }
 
+        public Book GetBookByGoogleBooksId(string googleBooksId)
+        {
+            return _context.Books.Where(book => book.GoogleBooksId == googleBooksId).FirstOrDefault();
+        }
+
         public List<Book> SearchBooks(string searchTerm)
         {
             // search by title, author or isbn

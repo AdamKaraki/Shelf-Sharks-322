@@ -83,6 +83,12 @@ namespace Shelf_Sharks.Models
                 var google_results = BooksService.Volumes.List(searchTerm).Execute();
                 foreach (var item in google_results.Items)
                 {
+                    // make sure it's not in the catalog
+                    if (_libraryAccessor.GetBookByGoogleBooksId())
+                    {
+                        continue;
+                    }
+
                     // find ISBN_13
                     Int64 isbn = 0;
                     foreach (var id in item.VolumeInfo.IndustryIdentifiers)

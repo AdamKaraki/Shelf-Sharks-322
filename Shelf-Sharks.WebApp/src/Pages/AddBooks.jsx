@@ -31,7 +31,7 @@ export default function AddBooks(props) {
     // remove book from books array
     setBooks(
       books.filter((addedBook) => {
-        return addedBook.uuid !== book.uuid;
+        return addedBook.googleBooksId !== book.googleBooksId;
       })
     );
   };
