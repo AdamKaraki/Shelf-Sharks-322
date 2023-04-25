@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Shelf_Sharks.Models
@@ -65,7 +66,14 @@ namespace Shelf_Sharks.Models
                     // one or more of these might be null.
                     // If we're at this point in the code, we shouldn't be showing
                     // an error to the user, so we can just use a default value
-                    Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
+                    if (volume.VolumeInfo.Authors != null)
+                    {
+                        Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
+                    }
+                    else
+                    {
+                        Author = "Unknown Author";
+                    }
                     Title = volume.VolumeInfo.Title ?? "Unknown Title";
                     Description = volume.VolumeInfo.Description ?? "Description not available.";
                     if (volume.VolumeInfo.ImageLinks != null)
@@ -77,6 +85,36 @@ namespace Shelf_Sharks.Models
                         CoverURL = "Unknown";
                     }
                 }
+            }
+        }
+
+        public Book(Google.Apis.Books.v1.Data.Volume volume)
+        {
+            // find ISBN 13
+            foreach (var id in volume.VolumeInfo.IndustryIdentifiers)
+            {
+                if (id.Type == "ISBN_13")
+                {
+                    ISBN = Int64.Parse(id.Identifier);
+                }
+            }
+            if (volume.VolumeInfo.Authors != null)
+            {
+                Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
+            }
+            else
+            {
+                Author = "Unknown Author";
+            }
+            Title = volume.VolumeInfo.Title ?? "Unknown Title";
+            Description = volume.VolumeInfo.Description ?? "Description not available.";
+            if (volume.VolumeInfo.ImageLinks != null)
+            {
+                CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
+            }
+            else
+            {
+                CoverURL = "Unknown";
             }
         }
 
@@ -102,6 +140,10 @@ namespace Shelf_Sharks.Models
         public DateTime DateAdded { get; init; } = DateTime.Now;
         public DateTime DateCheckedOut { get; set; }
         public DateTime DateReturnBy { get; set; }
+
+        // this variable isn't stored in the database
+        [NotMapped]
+        public bool InCatalog { get; set; } = true;
 
     }
 

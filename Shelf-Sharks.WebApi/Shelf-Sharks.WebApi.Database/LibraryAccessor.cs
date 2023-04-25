@@ -26,6 +26,12 @@ namespace Shelf_Sharks.WebApi.Database
             return _context.Books.Where(book => book.UUID == uuid).FirstOrDefault();
         }
 
+        public List<Book> SearchBooks(string searchTerm)
+        {
+            // search by title, author or isbn
+            return _context.Books.Where(book => book.Title.Contains(searchTerm) || book.Author.Contains(searchTerm) || book.ISBN.ToString().Contains(searchTerm)).ToList();
+        }
+
         public int GetNumCheckedOut()
         {
             return _context.Books.Where(book => book.IsCheckedOut).Count();

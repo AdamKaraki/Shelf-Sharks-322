@@ -26,6 +26,20 @@ namespace Shelf_Sharks.WebApi.Controllers
 
         }
 
+        // search endpoint
+        [HttpGet("/search")]
+        public ActionResult<ICollection<Book>> SearchBooks([FromQuery] string query)
+        {
+            try
+            {
+                return Ok(bookCatalog.SearchBooks(query));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
         [HttpGet("/book/{uuid}")]
         public ActionResult<Book> GetBook([FromRoute] Guid uuid)
         {

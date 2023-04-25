@@ -45,6 +45,47 @@ namespace Shelf_Sharks.Models
             return _libraryAccessor.GetBookByUUID(uuid);
         }
 
+        public Book[] SearchBooks(string searchTerm)
+        {
+            List<Book> results = _libraryAccessor.SearchBooks(searchTerm).ToList<Book>();
+            // if nothing was found in the catalog
+            // search google books
+            if (results.Count == 0)
+            {
+                var google_results = BooksService.Volumes.List(searchTerm).Execute();
+                foreach (var item in google_results.Items)
+                {
+                    // find ISBN_13
+                    Int64 isbn = 0;
+                    foreach (var id in item.VolumeInfo.IndustryIdentifiers)
+                    {
+                        if (id.Type == "ISBN_13")
+                        {
+                            isbn = Int64.Parse(id.Identifier);
+                        }
+                    }
+                    // check if the book is already in the catalog
+                    // if it is, create the book object from the catalog
+                    // otherwise, create a new book object from the google books api
+                    var book = _libraryAccessor.GetBookByISBN(isbn);
+                    if (book is null)
+                    {
+                        book = new Book(item);
+                        book.InCatalog = false;
+                        results.Add(book);
+                    }
+                    else
+                    {
+                        // add to front of list
+                        results.Insert(0, book);
+                    }
+
+                }
+            }
+            Console.WriteLine(searchTerm);
+            return results.ToArray();
+        }
+
         public int GetNumCheckedOut()
         {
             return _libraryAccessor.GetNumCheckedOut();
