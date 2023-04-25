@@ -15,7 +15,7 @@ export default function SpotlightWrapper(props) {
   const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    if (spotlight.opened) {
+    if (spotlight.opened && spotlight.query !== "") {
       // clear the spotlight results
       let action_ids = spotlight.actions.map((action) => action.id);
       spotlight.removeActions(action_ids);
@@ -23,7 +23,7 @@ export default function SpotlightWrapper(props) {
       let actions = [];
 
       // query the API for the current search
-      
+
       axios
         .get(`${apiURL}/search`, {
           params: {

@@ -39,6 +39,51 @@ export default function BookCard(props) {
     }
   };
 
+  const returnBook = async () => {
+    // send axios request to check out book
+    var res = await axios.post(`${apiURL}/return`, {
+      uuid: book.uuid,
+    });
+    if (res.status === 200) {
+      // set isCheckedOut to true
+      setBook({ ...book, isCheckedOut: false });
+      if (typeof props.onReturn === "function") {
+        props.onReturn(book);
+      }
+    } else {
+      console.error("Error returning book: " + res.status);
+    }
+  };
+
+  const checkoutBook = async () => {
+    // send axios request to check out book
+    var res = await axios.post(`${apiURL}/checkout`, {
+      uuid: book.uuid,
+    });
+    if (res.status === 200) {
+      // set isCheckedOut to true
+      setBook({ ...book, isCheckedOut: true });
+      if (typeof props.onCheckout === "function") {
+        props.onCheckout(book);
+      }
+    } else {
+      console.error("Error checking out book: " + res.status);
+    }
+  };
+
+  const addBook = async () => {
+    // send axios request to add book to library
+    var res = await axios.post(`${apiURL}/add`, {
+      googleBooksId: book.googleBooksId,
+    });
+    if (res.status !== 200) {
+      console.error("Error adding book: " + res.status);
+      if (typeof props.onAdd === "function") {
+        props.onAdd(book);
+      }
+    }
+  };
+
   return (
     <MediaQuery smallerThan="lg" styles={{ maxWidth: "inherit" }}>
       <Card
@@ -88,58 +133,16 @@ export default function BookCard(props) {
             )}
             {!props.newBook ? (
               !book.isCheckedOut ? (
-                <Button
-                  variant="light"
-                  color="red"
-                  onClick={async () => {
-                    // send axios request to check out book
-                    var res = await axios.post(`${apiURL}/checkout`, {
-                      uuid: book.uuid,
-                    });
-                    if (res.status === 200) {
-                      // set isCheckedOut to true
-                      setBook({ ...book, isCheckedOut: true });
-                    } else {
-                      console.error("Error checking out book: " + res.status);
-                    }
-                  }}
-                >
+                <Button variant="light" color="red" onClick={checkoutBook}>
                   Check Out
                 </Button>
               ) : (
-                <Button
-                  variant="light"
-                  color="green"
-                  onClick={async () => {
-                    // send axios request to check out book
-                    var res = await axios.post(`${apiURL}/return`, {
-                      uuid: book.uuid,
-                    });
-                    if (res.status === 200) {
-                      // set isCheckedOut to true
-                      setBook({ ...book, isCheckedOut: false });
-                    } else {
-                      console.error("Error returning book: " + res.status);
-                    }
-                  }}
-                >
+                <Button variant="light" color="green" onClick={returnBook}>
                   Return
                 </Button>
               )
             ) : (
-              <Button
-                variant="light"
-                onClick={async () => {
-                  // send axios request to add book to library
-                  var res = await axios.post(`${apiURL}/add`, {
-                    googleBooksId: book.googleBooksId,
-                  });
-                  if (res.status !== 200) {
-                    console.error("Error adding book: " + res.status);
-                  }
-                }}
-                color="blue"
-              >
+              <Button variant="light" onClick={addBook} color="blue">
                 Add to Library
               </Button>
             )}

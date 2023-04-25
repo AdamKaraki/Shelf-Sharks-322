@@ -27,6 +27,15 @@ export default function AddBooks(props) {
     navigate(-1);
   };
 
+  const onAdd = (book) => {
+    // remove book from books array
+    setBooks(
+      books.filter((addedBook) => {
+        return addedBook.uuid !== book.uuid;
+      })
+    );
+  };
+
   const search = () => {
     setLoading(true);
     axios
@@ -75,7 +84,7 @@ export default function AddBooks(props) {
           wrap="wrap"
         >
           {books.map((book) => {
-            return <BookCard book={book} newBook />;
+            return <BookCard book={book} onAdd={onAdd} newBook />;
           })}
         </Flex>
       )}

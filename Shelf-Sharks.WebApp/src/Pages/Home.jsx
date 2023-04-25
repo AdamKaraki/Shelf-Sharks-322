@@ -16,6 +16,15 @@ export default function Home(props) {
     });
   }, []);
 
+  const onReturn = (book) => {
+    // remove book from recent checkouts
+    setRecentCheckouts(
+      recentCheckouts.filter((recentCheckout) => {
+        return recentCheckout.uuid !== book.uuid;
+      })
+    );
+  };
+
   return (
     <Stack>
       <Stack>
@@ -44,7 +53,7 @@ export default function Home(props) {
           wrap="wrap"
         >
           {recentCheckouts.map((book) => {
-            return <BookCard book={book} />;
+            return <BookCard book={book} onReturn={onReturn} />;
           })}
         </Flex>
       </Stack>
