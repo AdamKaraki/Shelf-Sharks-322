@@ -42,6 +42,12 @@ namespace Shelf_Sharks.Models
         /// <returns></returns>
         public Book GetBook(Guid uuid)
         {
+            // make sure the book exists
+            if (_libraryAccessor.GetBookByUUID(uuid) == null)
+            {
+                throw new KeyNotFoundException("Book not found");
+            }
+
             return _libraryAccessor.GetBookByUUID(uuid);
         }
 
@@ -172,6 +178,11 @@ namespace Shelf_Sharks.Models
         /// <param name="googleBooksId"></param>
         public void AddBook(string googleBooksId)
         {
+            // make sure the book isn't already in the catalog
+            if (_libraryAccessor.GetBookByGoogleBooksId(googleBooksId) != null)
+            {
+                throw new System.Exception("Book is already in the catalog");
+            }
             // add a book using the google books id only constructor
             // this will trigger a Google Books API call
             _libraryAccessor.AddBook(new Book(googleBooksId));
@@ -184,6 +195,11 @@ namespace Shelf_Sharks.Models
         /// <exception cref="System.Exception"></exception>
         public void RemoveBook(Guid uuid)
         {
+            // make sure the book is in the catalog
+            if (_libraryAccessor.GetBookByUUID(uuid) is null)
+            {
+                throw new System.Exception("Book is not in the catalog");
+            }
             _libraryAccessor.RemoveBook(uuid);
         }
 

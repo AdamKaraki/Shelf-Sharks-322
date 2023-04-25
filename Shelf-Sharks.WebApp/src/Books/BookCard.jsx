@@ -82,8 +82,23 @@ export default function BookCard(props) {
     });
     if (res.status !== 200) {
       console.error("Error adding book: " + res.status);
+    } else {
       if (typeof props.onAdd === "function") {
         props.onAdd(book);
+      }
+    }
+  };
+
+  const removeBook = async () => {
+    // send axios request to remove book from library
+    var res = await axios.post(`${apiURL}/remove`, {
+      uuid: book.uuid,
+    });
+    if (res.status !== 200) {
+      console.error("Error removing book: " + res.status);
+    } else {
+      if (typeof props.onRemove === "function") {
+        props.onRemove(book);
       }
     }
   };
@@ -135,7 +150,8 @@ export default function BookCard(props) {
             ) : (
               <></>
             )}
-            {!props.newBook ? (
+
+            {!props.newBook && !props.removable ? (
               !book.isCheckedOut ? (
                 <Button variant="light" color="red" onClick={checkoutBook}>
                   Check Out
@@ -146,9 +162,23 @@ export default function BookCard(props) {
                 </Button>
               )
             ) : (
+              <></>
+            )}
+
+            {props.newBook ? (
               <Button variant="light" onClick={addBook} color="blue">
                 Add to Library
               </Button>
+            ) : (
+              <></>
+            )}
+
+            {props.removable ? (
+              <Button variant="light" color="red" onClick={removeBook}>
+                Remove
+              </Button>
+            ) : (
+              <></>
             )}
           </Group>
           {book.isCheckedOut ? (
