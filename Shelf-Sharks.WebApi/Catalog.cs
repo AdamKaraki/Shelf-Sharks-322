@@ -84,7 +84,7 @@ namespace Shelf_Sharks.Models
                 foreach (var item in google_results.Items)
                 {
                     // make sure it's not in the catalog
-                    if (_libraryAccessor.GetBookByGoogleBooksId())
+                    if (_libraryAccessor.GetBookByGoogleBooksId(item.Id) != null)
                     {
                         continue;
                     }
