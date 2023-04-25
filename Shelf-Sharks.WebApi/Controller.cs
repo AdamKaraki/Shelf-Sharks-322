@@ -67,11 +67,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/checkout")]
-        public ActionResult CheckOutBook([FromBody] Guid uuid)
+        public ActionResult CheckOutBook([FromBody] InputModel postData)
         {
             try
             {
-                bookCatalog.CheckOutBook(uuid);
+                bookCatalog.CheckOutBook(postData.uuid);
                 return Ok();
             }
             catch (Exception ex)
@@ -81,11 +81,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/return")]
-        public ActionResult ReturnBook([FromBody] Guid uuid)
+        public ActionResult ReturnBook([FromBody] InputModel postData)
         {
             try
             {
-                bookCatalog.ReturnBook(uuid);
+                bookCatalog.ReturnBook(postData.uuid);
                 return Ok();
             }
             catch (Exception ex)
@@ -95,11 +95,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/add")]
-        public ActionResult AddBook([FromBody] Int64 isbn)
+        public ActionResult AddBook([FromBody] InputModel postData)
         {
             try
             {
-                bookCatalog.AddBook(isbn);
+                bookCatalog.AddBook(postData.isbn);
                 return Ok();
             }
             catch (Exception ex)
@@ -109,11 +109,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/remove")]
-        public ActionResult RemoveBook([FromBody] Int64 isbn)
+        public ActionResult RemoveBook([FromBody] InputModel postData)
         {
             try
             {
-                bookCatalog.RemoveBook(isbn);
+                bookCatalog.RemoveBook(postData.isbn);
                 return Ok();
             }
             catch (Exception ex)
