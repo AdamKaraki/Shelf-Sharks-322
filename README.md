@@ -46,7 +46,7 @@ software for their routine tasks.
 
 Make sure you have current versions of yarn, nodejs and npm installed. Run the following commands from the repository root.
 
-    cd shelf-sharks-frontend
+    cd Shelf-Sharks.WebApp
 
 Install dependencies
 
