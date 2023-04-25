@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { Group, Text, Anchor, Pagination } from "@mantine/core";
+import { Group, Text, Anchor, Pagination, Button } from "@mantine/core";
 import { useSpotlight } from "@mantine/spotlight";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function SpotlightWrapper(props) {
   const [bookCount, setBookCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [rateLimit, setRateLimit] = useState(0);
   const [page, setPage] = useState(1);
   const spotlight = useSpotlight();
+  const navigate = useNavigate();
 
   const apiURL = import.meta.env.VITE_API_URL;
 
@@ -20,33 +23,34 @@ export default function SpotlightWrapper(props) {
       let actions = [];
 
       // query the API for the current search
+      
       axios
-        .post(`${apiURL}/api/books/search`, {
-          query: spotlight.query,
-          page: page,
+        .get(`${apiURL}/search`, {
+          params: {
+            query: spotlight.query,
+            // don't search google books for this query
+            isCatalogSearch: true,
+          },
         })
         .then((res) => {
-          setBookCount(res.data.fullCount);
-          // calculate the number of pages
-          setTotalPages(Math.ceil(res.data.fullCount / 10));
-
+          setBookCount(res.data.length);
           // add the new results
-          res.data.books.forEach((book) => {
+          res.data.forEach((book) => {
             actions.push({
               id: book.uuid,
               title: book.title,
               description: book.author,
               image: book.coverURL,
-              onClick: () => {
-                spotlight.close();
-                props.history.push(`/books/${book.id}`);
+              onTrigger: () => {
+                spotlight.opened = false;
+                navigate(`/book/${book.uuid}`);
               },
             });
           });
-        });
 
-      // register the actions
-      spotlight.registerActions(actions);
+          // register the actions
+          spotlight.registerActions(actions);
+        });
     }
   }, [spotlight.query, spotlight.opened, page]);
 

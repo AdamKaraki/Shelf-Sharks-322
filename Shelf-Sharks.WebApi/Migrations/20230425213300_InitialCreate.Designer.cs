@@ -11,7 +11,7 @@ using Shelf_Sharks.WebApi.Database;
 namespace Shelf_Sharks.WebApi.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20230424010006_InitialCreate")]
+    [Migration("20230425213300_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,6 +42,10 @@ namespace Shelf_Sharks.WebApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GoogleBooksId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<long>("ISBN")

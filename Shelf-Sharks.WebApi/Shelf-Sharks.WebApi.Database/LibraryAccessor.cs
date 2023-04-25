@@ -16,6 +16,11 @@ namespace Shelf_Sharks.WebApi.Database
             return _context.Books.ToList();
         }
 
+        public int GetNumBooks()
+        {
+            return _context.Books.Count();
+        }
+
         public Book GetBookByISBN(Int64 isbn)
         {
             return _context.Books.Where(book => book.ISBN == isbn).FirstOrDefault();
@@ -29,7 +34,10 @@ namespace Shelf_Sharks.WebApi.Database
         public List<Book> SearchBooks(string searchTerm)
         {
             // search by title, author or isbn
-            return _context.Books.Where(book => book.Title.Contains(searchTerm) || book.Author.Contains(searchTerm) || book.ISBN.ToString().Contains(searchTerm)).ToList();
+            return _context.Books.Where(book =>
+                book.Title.ToLower().Contains(searchTerm.ToLower()) ||
+                book.Author.ToLower().Contains(searchTerm.ToLower()) ||
+                book.ISBN.ToString().Contains(searchTerm)).ToList();
         }
 
         public int GetNumCheckedOut()
@@ -39,7 +47,7 @@ namespace Shelf_Sharks.WebApi.Database
 
         public Book[] GetRecentlyCheckedOut()
         {
-            return _context.Books.Where(book => book.DateCheckedOut != DateTime.UnixEpoch).OrderBy(book => book.DateCheckedOut).Take(5).ToArray();
+            return _context.Books.Where(book => book.DateCheckedOut != DateTime.UnixEpoch && book.IsCheckedOut == true).OrderBy(book => book.DateCheckedOut).Take(5).ToArray();
         }
         public void AddBook(Book book)
         {
@@ -47,9 +55,9 @@ namespace Shelf_Sharks.WebApi.Database
             _context.SaveChanges();
         }
 
-        public void RemoveBook(Int64 isbn)
+        public void RemoveBook(Guid uuid)
         {
-            var bookToRemove = GetBookByISBN(isbn);
+            var bookToRemove = GetBookByUUID(uuid);
             _context.Remove(bookToRemove);
             _context.SaveChanges();
         }

@@ -11,16 +11,9 @@ export default function Home(props) {
   const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    axios.get(`${apiURL}/books`).then((response) => {
-      setBooks(response.data);
+    axios.get(`${apiURL}/books/recently_checked_out`).then((response) => {
+      setRecentCheckouts(response.data);
     });
-    // load recent checkouts and latest arrivals
-    // axios.get(`${apiURL}/latest/checkouts`).then((response) => {
-    //   setRecentCheckouts(response.data);
-    // });
-    // axios.get(`${apiURL}/latest/arrivals`).then((response) => {
-    //   setLatestArrivals(response.data);
-    // });
   }, []);
 
   return (
@@ -50,7 +43,7 @@ export default function Home(props) {
           gap={{ base: "sm", sm: "lg" }}
           wrap="wrap"
         >
-          {books.map((book) => {
+          {recentCheckouts.map((book) => {
             return <BookCard book={book} />;
           })}
         </Flex>

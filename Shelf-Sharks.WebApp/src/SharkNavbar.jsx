@@ -11,6 +11,7 @@ import { Routes, Route, Link } from "react-router-dom";
 
 export default function SharkNavbar(props) {
   const [booksCheckedOut, setBooksCheckedOut] = useState(0);
+  const [numBooks, setNumBooks] = useState(0);
   const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -20,6 +21,13 @@ export default function SharkNavbar(props) {
       setBooksCheckedOut(data);
     };
     getBooksCheckedOut();
+
+    const getNumBooks = async () => {
+      const response = await fetch(`${apiURL}/stats/num_books`);
+      const data = await response.text();
+      setNumBooks(data);
+    };
+    getNumBooks();
   }, []);
 
   return (
@@ -29,7 +37,7 @@ export default function SharkNavbar(props) {
       hidden={!props.opened}
       width={{ sm: 200, lg: 300 }}
     >
-      <Navbar.Section>
+      <Navbar.Section mb="md">
         <Title order={3}>Librarian</Title>
         <Space h="md" />
         <Link to="/check-in" style={{ textDecoration: "none" }}>
@@ -38,7 +46,7 @@ export default function SharkNavbar(props) {
               borderRadius: 6,
             }}
             label="Check-in Books"
-            description={booksCheckedOut}
+            description={`Books out: ${booksCheckedOut}`}
             icon={<IconBookDownload color="lightGreen" />}
           />
         </Link>
@@ -72,7 +80,7 @@ export default function SharkNavbar(props) {
               borderRadius: 6,
             }}
             label="Add Books"
-            description="432 books in database"
+            description={`${numBooks} book(s) in database`}
             icon={<IconDatabaseImport color="lightBlue" />}
           />
         </Link>

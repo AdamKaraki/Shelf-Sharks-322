@@ -45,12 +45,40 @@ namespace Shelf_Sharks.Models
             return _libraryAccessor.GetBookByUUID(uuid);
         }
 
-        public Book[] SearchBooks(string searchTerm)
+        /// <summary>
+        /// Gets the total number of books in the catalog
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumBooks()
         {
-            List<Book> results = _libraryAccessor.SearchBooks(searchTerm).ToList<Book>();
+            return _libraryAccessor.GetNumBooks();
+        }
+
+        /// <summary>
+        /// Gets the number of books checked out
+        /// </summary>
+        /// <returns></returns>
+        public Book[] GetRecentlyCheckedOut()
+        {
+            return _libraryAccessor.GetRecentlyCheckedOut();
+        }
+
+        /// <summary>
+        /// Searches the catalog for a book or books
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="isCatalogSearch"></param>
+        /// <returns></returns>
+        public Book[] SearchBooks(string searchTerm, bool isCatalogSearch)
+        {
+            List<Book> results = new List<Book>();
+            if (isCatalogSearch == true)
+            {
+                results = _libraryAccessor.SearchBooks(searchTerm).ToList<Book>();
+            }
             // if nothing was found in the catalog
             // search google books
-            if (results.Count == 0)
+            if (results.Count == 0 && isCatalogSearch == false)
             {
                 var google_results = BooksService.Volumes.List(searchTerm).Execute();
                 foreach (var item in google_results.Items)
@@ -86,6 +114,10 @@ namespace Shelf_Sharks.Models
             return results.ToArray();
         }
 
+        /// <summary>
+        /// Gets the number of books checked out
+        /// </summary>
+        /// <returns></returns>
         public int GetNumCheckedOut()
         {
             return _libraryAccessor.GetNumCheckedOut();
@@ -129,24 +161,24 @@ namespace Shelf_Sharks.Models
         }
 
         /// <summary>
-        /// Adds a new book to the catalog
+        /// Adds a book to the catalog
         /// </summary>
-        /// <param name="isbn">The ISBN of the book to add</param>
-        public void AddBook(Int64 isbn)
+        /// <param name="googleBooksId"></param>
+        public void AddBook(string googleBooksId)
         {
-            // add a book using the isbn only constructor
+            // add a book using the google books id only constructor
             // this will trigger a Google Books API call
-            _libraryAccessor.AddBook(new Book(isbn));
+            _libraryAccessor.AddBook(new Book(googleBooksId));
         }
 
         /// <summary>
         /// Removes a book from the catalog
         /// </summary>
-        /// <param name="isbn">The ISBN of the book to remove</param>
+        /// <param name="uuid">The UUID of the book to remove</param>
         /// <exception cref="System.Exception"></exception>
-        public void RemoveBook(Int64 isbn)
+        public void RemoveBook(Guid uuid)
         {
-            _libraryAccessor.RemoveBook(isbn);
+            _libraryAccessor.RemoveBook(uuid);
         }
 
         /// <summary>

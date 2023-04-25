@@ -63,33 +63,32 @@ namespace Shelf_Sharks.Models
                 if (volume != null)
                 {
                     // set book properties
-                    // one or more of these might be null.
-                    // If we're at this point in the code, we shouldn't be showing
-                    // an error to the user, so we can just use a default value
-                    if (volume.VolumeInfo.Authors != null)
-                    {
-                        Author = volume.VolumeInfo.Authors.First() ?? "Unknown Author";
-                    }
-                    else
-                    {
-                        Author = "Unknown Author";
-                    }
-                    Title = volume.VolumeInfo.Title ?? "Unknown Title";
-                    Description = volume.VolumeInfo.Description ?? "Description not available.";
-                    if (volume.VolumeInfo.ImageLinks != null)
-                    {
-                        CoverURL = volume.VolumeInfo.ImageLinks.Thumbnail ?? "Unknown";
-                    }
-                    else
-                    {
-                        CoverURL = "Unknown";
-                    }
+                    PopulateFromVolume(volume);
                 }
             }
         }
 
+        public Book(string googleBooksId)
+        {
+            // get book details from id
+            Google.Apis.Books.v1.Data.Volume volume =
+                Catalog.BooksService.Volumes.Get(googleBooksId).Execute();
+
+            PopulateFromVolume(volume);
+        }
+
         public Book(Google.Apis.Books.v1.Data.Volume volume)
         {
+            PopulateFromVolume(volume);
+        }
+
+        /// <summary>
+        /// Populates the book's properties from a Google Books API Volume object
+        /// </summary>
+        /// <param name="volume"></param>
+        public void PopulateFromVolume(Google.Apis.Books.v1.Data.Volume volume)
+        {
+            GoogleBooksId = volume.Id;
             // find ISBN 13
             foreach (var id in volume.VolumeInfo.IndustryIdentifiers)
             {
@@ -130,13 +129,14 @@ namespace Shelf_Sharks.Models
         }
 
         public int Id { get; set; }
-        public string? Author { get; init; }
-        public string? Title { get; init; }
-        public string? Description { get; init; }
-        public Int64 ISBN { get; init; }
+        public string? Author { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public Int64 ISBN { get; set; }
         public bool IsCheckedOut { get; set; }
-        public string? CoverURL { get; init; }
-        public Guid UUID { get; init; }
+        public string? CoverURL { get; set; }
+        public Guid UUID { get; init; } = Guid.NewGuid();
+        public String GoogleBooksId { get; set; }
         public DateTime DateAdded { get; init; } = DateTime.Now;
         public DateTime DateCheckedOut { get; set; }
         public DateTime DateReturnBy { get; set; }

@@ -41,6 +41,10 @@ namespace Shelf_Sharks.WebApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("GoogleBooksId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<long>("ISBN")
                         .HasColumnType("INTEGER");
 

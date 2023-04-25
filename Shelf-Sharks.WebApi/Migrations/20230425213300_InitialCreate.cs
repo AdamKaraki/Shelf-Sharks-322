@@ -24,6 +24,7 @@ namespace Shelf_Sharks.WebApi.Migrations
                     IsCheckedOut = table.Column<bool>(type: "INTEGER", nullable: false),
                     CoverURL = table.Column<string>(type: "TEXT", nullable: true),
                     UUID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    GoogleBooksId = table.Column<string>(type: "TEXT", nullable: false),
                     DateAdded = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DateCheckedOut = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DateReturnBy = table.Column<DateTime>(type: "TEXT", nullable: false)

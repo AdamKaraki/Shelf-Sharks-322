@@ -21,6 +21,8 @@ import Home from "./Pages/Home";
 import CheckIn from "./Pages/CheckIn";
 import CheckOut from "./Pages/CheckOut";
 import Book from "./Pages/Book";
+import AddBooks from "./Pages/AddBooks";
+import RemoveBooks from "./Pages/RemoveBooks";
 
 export default function App() {
   // hook will return either 'dark' or 'light' on client
@@ -31,25 +33,25 @@ export default function App() {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
-    >
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{ colorScheme }}
+    <BrowserRouter>
+      <ColorSchemeProvider
+        colorScheme={colorScheme}
+        toggleColorScheme={toggleColorScheme}
       >
-        <SpotlightProvider
-          shortcut={["mod + Space"]}
-          actions={[]}
-          actionsWrapperComponent={SpotlightWrapper}
-          searchIcon={<IconSearch size={18} />}
-          searchPlaceholder="Search Library..."
-          nothingFoundMessage="Nothing found..."
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{ colorScheme }}
         >
-          <ModalsProvider>
-            <BrowserRouter>
+          <SpotlightProvider
+            shortcut={["mod + Space"]}
+            actions={[]}
+            actionsWrapperComponent={SpotlightWrapper}
+            searchIcon={<IconSearch size={18} />}
+            searchPlaceholder="Search Library..."
+            nothingFoundMessage="No results found in library."
+          >
+            <ModalsProvider>
               <SharkShell
                 toggleColorScheme={toggleColorScheme}
                 colorScheme={colorScheme}
@@ -58,13 +60,15 @@ export default function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/check-in" element={<CheckIn />} />
                   <Route path="/check-out" element={<CheckOut />} />
+                  <Route path="/add-books" element={<AddBooks />} />
+                  <Route path="/remove-books" element={<RemoveBooks />} />
                   <Route path="/book/:book_uuid" element={<Book />} />
                 </Routes>
               </SharkShell>
-            </BrowserRouter>
-          </ModalsProvider>
-        </SpotlightProvider>
-      </MantineProvider>
-    </ColorSchemeProvider>
+            </ModalsProvider>
+          </SpotlightProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </BrowserRouter>
   );
 }

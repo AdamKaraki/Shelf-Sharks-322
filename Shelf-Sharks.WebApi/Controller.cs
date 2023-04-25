@@ -28,11 +28,11 @@ namespace Shelf_Sharks.WebApi.Controllers
 
         // search endpoint
         [HttpGet("/search")]
-        public ActionResult<ICollection<Book>> SearchBooks([FromQuery] string query)
+        public ActionResult<ICollection<Book>> SearchBooks([FromQuery] string query, [FromQuery] bool isCatalogSearch = true)
         {
             try
             {
-                return Ok(bookCatalog.SearchBooks(query));
+                return Ok(bookCatalog.SearchBooks(query, isCatalogSearch));
             }
             catch (Exception ex)
             {
@@ -59,6 +59,32 @@ namespace Shelf_Sharks.WebApi.Controllers
             try
             {
                 return Ok(bookCatalog.GetNumCheckedOut());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("/books/recently_checked_out")]
+        public ActionResult<Book[]> GetRecentlyCheckedOut()
+        {
+            try
+            {
+                return Ok(bookCatalog.GetRecentlyCheckedOut());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("/stats/num_books")]
+        public ActionResult<int> GetNumBooks()
+        {
+            try
+            {
+                return Ok(bookCatalog.GetNumBooks());
             }
             catch (Exception ex)
             {
@@ -99,7 +125,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         {
             try
             {
-                bookCatalog.AddBook(postData.isbn);
+                bookCatalog.AddBook(postData.googleBooksId);
                 return Ok();
             }
             catch (Exception ex)
@@ -113,7 +139,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         {
             try
             {
-                bookCatalog.RemoveBook(postData.isbn);
+                bookCatalog.RemoveBook(postData.uuid);
                 return Ok();
             }
             catch (Exception ex)
