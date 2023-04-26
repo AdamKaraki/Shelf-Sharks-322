@@ -1,8 +1,7 @@
 version: "3.4"
-name: shelf-sharks
-
 services:
   frontend:
+    container_name: shelf-sharks-frontend
     image: shelf-sharks-frontend
     build:
       context: Shelf-Sharks.WebApp
@@ -11,6 +10,7 @@ services:
       NODE_ENV: production
 
   backend:
+    container_name: shelf-sharks-backend
     image: shelf-sharks-backend
     build:
       context: Shelf-Sharks.WebApi
