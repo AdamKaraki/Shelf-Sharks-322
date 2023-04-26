@@ -3,14 +3,22 @@ name: shelf-sharks
 
 services:
   frontend:
-    image: shelfsharksfrontend
+    image: shelf-sharks-frontend
     build:
-      context: shelf-sharks-frontend
+      context: Shelf-Sharks.WebApp
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-    ports:
-      - 3000:3000
 
-  # backend:
-  # back-end goes here
+  backend:
+    image: shelf-sharks-backend
+    build:
+      context: Shelf-Sharks.WebApi
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+
+networks:
+  default:
+    external:
+      name: nginx-proxy_default
