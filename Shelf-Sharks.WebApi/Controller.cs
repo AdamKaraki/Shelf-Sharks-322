@@ -79,6 +79,19 @@ namespace Shelf_Sharks.WebApi.Controllers
             }
         }
 
+        [HttpGet("/books/recently_added")]
+        public ActionResult<Book[]> GetRecentlyAdded()
+        {
+            try
+            {
+                return Ok(bookCatalog.GetRecentlyAdded());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
         [HttpGet("/stats/num_books")]
         public ActionResult<int> GetNumBooks()
         {
@@ -93,12 +106,11 @@ namespace Shelf_Sharks.WebApi.Controllers
         }
 
         [HttpPost("/checkout")]
-        public ActionResult CheckOutBook([FromBody] InputModel postData)
+        public ActionResult<Book> CheckOutBook([FromBody] InputModel postData)
         {
             try
             {
-                bookCatalog.CheckOutBook(postData.uuid);
-                return Ok();
+                return Ok(bookCatalog.CheckOutBook(postData.uuid));
             }
             catch (Exception ex)
             {
@@ -111,8 +123,7 @@ namespace Shelf_Sharks.WebApi.Controllers
         {
             try
             {
-                bookCatalog.ReturnBook(postData.uuid);
-                return Ok();
+                return Ok(bookCatalog.ReturnBook(postData.uuid));
             }
             catch (Exception ex)
             {

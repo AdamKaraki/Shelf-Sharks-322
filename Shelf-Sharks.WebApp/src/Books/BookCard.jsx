@@ -60,10 +60,11 @@ export default function BookCard(props) {
         uuid: book.uuid,
       })
       .then((res) => {
-        // set isCheckedOut to true
-        setBook({ ...book, isCheckedOut: false });
+        // /return returns a book object
+        // so let's update ours with the new one
+        setBook(res.data);
         if (typeof props.onReturn === "function") {
-          props.onReturn(book);
+          props.onReturn(res.data);
         }
       })
       .catch((err) => {
@@ -79,10 +80,11 @@ export default function BookCard(props) {
         uuid: book.uuid,
       })
       .then((res) => {
-        // set isCheckedOut to true
-        setBook({ ...book, isCheckedOut: true });
+        // /checkout returns a book object
+        // so let's update ours with the new one
+        setBook(res.data);
         if (typeof props.onCheckout === "function") {
-          props.onCheckout(book);
+          props.onCheckout(res.data);
         }
       })
       .catch((err) => {

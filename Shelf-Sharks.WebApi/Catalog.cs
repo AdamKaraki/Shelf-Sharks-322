@@ -69,6 +69,11 @@ namespace Shelf_Sharks.Models
             return _libraryAccessor.GetRecentlyCheckedOut();
         }
 
+        public Book[] GetRecentlyAdded()
+        {
+            return _libraryAccessor.GetRecentlyAdded();
+        }
+
         /// <summary>
         /// Searches the catalog for a book or books
         /// </summary>
@@ -122,7 +127,6 @@ namespace Shelf_Sharks.Models
 
                 }
             }
-            Console.WriteLine(searchTerm);
             return results.ToArray();
         }
 
@@ -139,7 +143,7 @@ namespace Shelf_Sharks.Models
         /// Checks out a book in the catalog
         /// </summary>
         /// <exception cref="System.Exception">Throws when a book isn't found or is already checked out</exception>
-        public void CheckOutBook(Guid uuid)
+        public Book CheckOutBook(Guid uuid)
         {
             var bookToCheckout = _libraryAccessor.GetBookByUUID(uuid);
             if (bookToCheckout is null)
@@ -151,6 +155,7 @@ namespace Shelf_Sharks.Models
                 throw new System.Exception("Book is already checked out");
             }
             _libraryAccessor.CheckOutBook(bookToCheckout);
+            return bookToCheckout;
         }
 
         /// <summary>
@@ -158,7 +163,7 @@ namespace Shelf_Sharks.Models
         /// </summary>
         /// <param name="uuid">The UUID of the book to return</param>
         /// <exception cref="System.Exception">Throws when a book isn't found or is not checked out</exception>
-        public void ReturnBook(Guid uuid)
+        public Book ReturnBook(Guid uuid)
         {
             var bookToCheckout = _libraryAccessor.GetBookByUUID(uuid);
             if (bookToCheckout is null)
@@ -170,6 +175,7 @@ namespace Shelf_Sharks.Models
                 throw new System.Exception("Book is not checked out");
             }
             _libraryAccessor.ReturnBook(bookToCheckout);
+            return bookToCheckout;
         }
 
         /// <summary>

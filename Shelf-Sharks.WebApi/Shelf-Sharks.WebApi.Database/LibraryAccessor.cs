@@ -54,6 +54,12 @@ namespace Shelf_Sharks.WebApi.Database
         {
             return _context.Books.Where(book => book.DateCheckedOut != DateTime.UnixEpoch && book.IsCheckedOut == true).OrderBy(book => book.DateCheckedOut).Take(5).ToArray();
         }
+
+        public Book[] GetRecentlyAdded()
+        {
+            return _context.Books.OrderByDescending(book => book.DateAdded).Take(5).ToArray();
+        }
+
         public void AddBook(Book book)
         {
             _context.Books.Add(book);
