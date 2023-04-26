@@ -17,7 +17,7 @@ import { useState } from "react";
 import { IconSearch } from "@tabler/icons";
 
 import SharkShell from "./SharkShell";
-import SpotlightWrapper from "./Spotlight/SpotlightWrapper";
+import SpotlightWrapper from "./spotlight/SpotlightWrapper";
 import Home from "./Pages/Home";
 import CheckIn from "./Pages/CheckIn";
 import CheckOut from "./Pages/CheckOut";
