@@ -23,6 +23,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { modals } from "@mantine/modals";
 
 export default function BookCard(props) {
   const theme = useMantineTheme();
@@ -34,6 +35,15 @@ export default function BookCard(props) {
     setBook(props.book);
   }, [props.book]);
 
+  const showError = (message) => {
+    modals.openContextModal({
+      modal: "error",
+      innerProps: {
+        modalBody: message,
+      },
+    });
+  };
+
   const formatDescription = (description, maxWords) => {
     let words = description.split(" ");
     if (words.length > maxWords) {
@@ -43,64 +53,76 @@ export default function BookCard(props) {
     }
   };
 
-  const returnBook = async () => {
+  const returnBook = () => {
     // send axios request to check out book
-    var res = await axios.post(`${apiURL}/return`, {
-      uuid: book.uuid,
-    });
-    if (res.status === 200) {
-      // set isCheckedOut to true
-      setBook({ ...book, isCheckedOut: false });
-      if (typeof props.onReturn === "function") {
-        props.onReturn(book);
-      }
-    } else {
-      console.error("Error returning book: " + res.status);
-    }
+    axios
+      .post(`${apiURL}/return`, {
+        uuid: book.uuid,
+      })
+      .then((res) => {
+        // set isCheckedOut to true
+        setBook({ ...book, isCheckedOut: false });
+        if (typeof props.onReturn === "function") {
+          props.onReturn(book);
+        }
+      })
+      .catch((err) => {
+        showError(err.response.data);
+        console.error("Error returning book: " + err.response.status);
+      });
   };
 
-  const checkoutBook = async () => {
+  const checkoutBook = () => {
     // send axios request to check out book
-    var res = await axios.post(`${apiURL}/checkout`, {
-      uuid: book.uuid,
-    });
-    if (res.status === 200) {
-      // set isCheckedOut to true
-      setBook({ ...book, isCheckedOut: true });
-      if (typeof props.onCheckout === "function") {
-        props.onCheckout(book);
-      }
-    } else {
-      console.error("Error checking out book: " + res.status);
-    }
+    axios
+      .post(`${apiURL}/checkout`, {
+        uuid: book.uuid,
+      })
+      .then((res) => {
+        // set isCheckedOut to true
+        setBook({ ...book, isCheckedOut: true });
+        if (typeof props.onCheckout === "function") {
+          props.onCheckout(book);
+        }
+      })
+      .catch((err) => {
+        showError(err.response.data);
+        console.error("Error checking out book: " + err.response.status);
+      });
   };
 
-  const addBook = async () => {
+  const addBook = () => {
     // send axios request to add book to library
-    var res = await axios.post(`${apiURL}/add`, {
-      googleBooksId: book.googleBooksId,
-    });
-    if (res.status !== 200) {
-      console.error("Error adding book: " + res.status);
-    } else {
-      if (typeof props.onAdd === "function") {
-        props.onAdd(book);
-      }
-    }
+    axios
+      .post(`${apiURL}/add`, {
+        googleBooksId: book.googleBooksId,
+      })
+      .then((res) => {
+        if (typeof props.onAdd === "function") {
+          props.onAdd(book);
+        }
+      })
+      .catch((err) => {
+        showError(err.response.data);
+        console.error("Error adding book: " + err.response.status);
+      });
   };
 
-  const removeBook = async () => {
+  const removeBook = () => {
     // send axios request to remove book from library
-    var res = await axios.post(`${apiURL}/remove`, {
-      uuid: book.uuid,
-    });
-    if (res.status !== 200) {
-      console.error("Error removing book: " + res.status);
-    } else {
-      if (typeof props.onRemove === "function") {
-        props.onRemove(book);
-      }
-    }
+    axios
+      .post(`${apiURL}/remove`, {
+        uuid: book.uuid,
+      })
+      .then((res) => {
+        if (typeof props.onRemove === "function") {
+          props.onRemove(book);
+        }
+      })
+      .catch((err) => {
+        showError(err.response.data);
+        console.error("Error removing book: " + err.response.status);
+      });
   };
 
   return (

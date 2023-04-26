@@ -6,6 +6,7 @@ import {
   Group,
   Stack,
   Flex,
+  Button,
 } from "@mantine/core";
 import { SpotlightProvider } from "@mantine/spotlight";
 import { ModalsProvider } from "@mantine/modals";
@@ -23,6 +24,20 @@ import CheckOut from "./Pages/CheckOut";
 import Book from "./Pages/Book";
 import AddBooks from "./Pages/AddBooks";
 import RemoveBooks from "./Pages/RemoveBooks";
+
+const ErrorModal = ({ id, innerProps, context }) => (
+  <>
+    <Title order={3}>{innerProps.modalBody}</Title>
+    <Button
+      fullWidth
+      mt="md"
+      color="red"
+      onClick={() => context.closeModal(id)}
+    >
+      Understood
+    </Button>
+  </>
+);
 
 export default function App() {
   // hook will return either 'dark' or 'light' on client
@@ -51,7 +66,7 @@ export default function App() {
             searchPlaceholder="Search Library..."
             nothingFoundMessage="No results found in library."
           >
-            <ModalsProvider>
+            <ModalsProvider modals={{ error: ErrorModal }}>
               <SharkShell
                 toggleColorScheme={toggleColorScheme}
                 colorScheme={colorScheme}
