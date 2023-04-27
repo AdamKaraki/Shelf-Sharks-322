@@ -22,13 +22,13 @@ software for their routine tasks.
 
 ## Color Reference
 
-| Member Name | Role  |
-| ----------- | ----- |
-| Nathan      | EMPTY |
-| Adam W      | EMPTY |
-| Jaxon       | EMPTY |
-| Adam K      | EMPTY |
-| Juan I      | EMPTY |
+| Member Name | Role                         |
+| ----------- | -----                        |
+| Nathan      | Frontend/Backend Development |
+| Adam W      | Backend Development          |
+| Jaxon       | Backend Development          |
+| Adam K      | Frontend Development         |
+| Juan I      | Backend Development          |
 
 ## Tech Stack
 
