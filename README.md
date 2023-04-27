@@ -19,6 +19,7 @@ software for their routine tasks.
 - [Nathan Laha](https://github.com/nlaha)
 - [Adam Karaki](https://www.github.com/AdamKaraki)
 - [Jaxon McClelland](https://www.github.com/jaxon-mcclelland)
+- [Adam Waegener](https://github.com/CodeAjaxDM)
 
 ## Color Reference
 
