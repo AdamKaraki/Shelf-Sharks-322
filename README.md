@@ -40,7 +40,10 @@ software for their routine tasks.
 - Mantine.dev
 - Vite
 
-**Server:** EMPTY
+**Server:**
+
+- ASP.NET
+- Entity Framework
 
 ## Development Setup
 
@@ -59,3 +62,9 @@ Start the dev server
     yarn dev
 
 Visit the URL listed in the console output in a browser
+
+### Server
+
+Start the server
+
+    dotnet run
