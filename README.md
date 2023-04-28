@@ -1,18 +1,11 @@
 # Shelf Sharks
 
-You will be developing a librarian assistant that helps a librarian manage common
+We will be developing a librarian assistant that helps a librarian manage common
 library-management tasks, including user registration, book search, placing hold on a
-book, checking out a book, and returning a book, etc. You may need to use a database
+book, checking out a book, and returning a book, etc. We use a database
 of book information to support this application. Users can also browse the books in the
-library and look into the details about each book selected. The user interface could be a
-desktop application or a website portal.
+library and look into the details about each book selected. The user interface is a website portal.
 
-You may use your creativity to determine which properties/attributes each book should
-have. You are encouraged to sit with a WSU librarian to understand details
-3
-
-requirements of the application assuming that the librarian would end up with using this
-software for their routine tasks.
 
 ## Authors
 
