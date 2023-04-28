@@ -20,7 +20,7 @@ software for their routine tasks.
 - [Adam Karaki](https://www.github.com/AdamKaraki)
 - [Jaxon McClelland](https://www.github.com/jaxon-mcclelland)
 - [Adam Waegener](https://github.com/CodeAjaxDM)
-- [Juan Ibarra] (https://github.com/ILoveTacos25)
+- [Juan Ibarra](https://github.com/ILoveTacos25)
 
 ## Color Reference
 

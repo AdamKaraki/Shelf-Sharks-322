@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Shelf-Sharks.WebApi"
+    "\\.github",
+    "\\Shelf-Sharks.WebApi",
+    "\\Shelf-Sharks.WebApi\\Migrations",
+    "\\Shelf-Sharks.WebApi\\Properties",
+    "\\Shelf-Sharks.WebApp"
   ],
-  "SelectedNode": "\\Shelf-Sharks.WebApi\\Program.cs",
+  "SelectedNode": "\\README.md",
   "PreviewInSolutionExplorer": false
 }
