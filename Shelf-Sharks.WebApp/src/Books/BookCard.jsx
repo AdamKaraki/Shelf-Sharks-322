@@ -13,6 +13,7 @@ import {
   MediaQuery,
   Title,
   Flex,
+  Transition,
 } from "@mantine/core";
 import {
   IconBook,
@@ -21,15 +22,16 @@ import {
   IconUser,
 } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { modals } from "@mantine/modals";
 
-export default function BookCard(props) {
+export default function BookCard(props, { show = true }) {
   const theme = useMantineTheme();
   const [book, setBook] = useState(props.book);
   let navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API_URL;
+  const cardRef = useRef();
 
   useEffect(() => {
     setBook(props.book);
@@ -129,152 +131,159 @@ export default function BookCard(props) {
 
   return (
     <MediaQuery smallerThan="lg" styles={{ maxWidth: "inherit" }}>
-      <Card
-        shadow="sm"
-        p="lg"
-        radius="md"
-        miw={350}
-        mih={props.fullPage ? 500 : 300}
-        maw={props.fullPage ? "100%" : 250}
-        sx={{ flex: 1 }}
-        withBorder
-      >
-        <Card.Section
-          sx={{
-            backgroundColor:
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0],
-          }}
+      {show ? (
+        <Card
+          ref={cardRef}
+          style={{ animation: "fadeIn 0.5s ease-in-out" }}
+          shadow="sm"
+          p="lg"
+          radius="md"
+          miw={350}
+          mih={props.fullPage ? 500 : 300}
+          maw={props.fullPage ? "100%" : 250}
+          sx={{ flex: 1 }}
+          withBorder
         >
-          <Center>
-            <Image
-              withPlaceholder
-              placeholder={<IconBook size={props.fullPage ? 100 : 30} />}
-              height={props.fullPage ? 300 : 120}
-              width={"auto"}
-              miw={90}
-              src={book.coverURL}
-              alt={book.title}
-            />
-          </Center>
-        </Card.Section>
-        <Card.Section inheritPadding>
-          <Group spacing="md" my="md">
-            {!props.fullPage && !props.newBook ? (
-              <Button
-                variant="light"
-                color="blue"
-                onClick={() => {
-                  navigate(`/book/${book.uuid}`);
-                }}
-              >
-                Learn More
-              </Button>
-            ) : (
-              <></>
-            )}
-
-            {!props.newBook && !props.removable ? (
-              !book.isCheckedOut ? (
-                <Button variant="light" color="red" onClick={checkoutBook}>
-                  Check Out
+          <Card.Section
+            sx={{
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[8]
+                  : theme.colors.gray[0],
+            }}
+          >
+            <Center>
+              <Image
+                withPlaceholder
+                placeholder={<IconBook size={props.fullPage ? 100 : 30} />}
+                height={props.fullPage ? 300 : 120}
+                width={"auto"}
+                miw={90}
+                src={book.coverURL}
+                alt={book.title}
+              />
+            </Center>
+          </Card.Section>
+          <Card.Section inheritPadding>
+            <Group spacing="md" my="md">
+              {!props.fullPage && !props.newBook ? (
+                <Button
+                  variant="light"
+                  color="blue"
+                  onClick={() => {
+                    navigate(`/book/${book.uuid}`);
+                  }}
+                >
+                  Learn More
                 </Button>
               ) : (
-                <Button variant="light" color="green" onClick={returnBook}>
-                  Return
-                </Button>
-              )
-            ) : (
-              <></>
-            )}
-
-            {props.newBook ? (
-              <Button variant="light" onClick={addBook} color="blue">
-                Add to Library
-              </Button>
-            ) : (
-              <></>
-            )}
-
-            {props.removable ? (
-              <Button variant="light" color="red" onClick={removeBook}>
-                Remove
-              </Button>
-            ) : (
-              <></>
-            )}
-          </Group>
-          {book.isCheckedOut ? (
-            <>
-              <List spacing="xs">
-                <List.Item
-                  key="dateCheckedOut"
-                  icon={
-                    <ThemeIcon color="orange" size={24} radius="xl">
-                      <IconBookUpload size={16} />
-                    </ThemeIcon>
-                  }
-                >
-                  <Text>
-                    Date checked out:
-                    <b> {new Date(book.dateCheckedOut).toLocaleDateString()}</b>
-                  </Text>
-                </List.Item>
-
-                <List.Item
-                  key="dateReturnBy"
-                  icon={
-                    <ThemeIcon color="green" size={24} radius="xl">
-                      <IconBookDownload size={16} />
-                    </ThemeIcon>
-                  }
-                >
-                  <Text>
-                    Date to return:{" "}
-                    <b> {new Date(book.dateReturnBy).toLocaleDateString()}</b>
-                  </Text>{" "}
-                </List.Item>
-              </List>
-            </>
-          ) : (
-            <></>
-          )}
-        </Card.Section>
-        <Card.Section inheritPadding>
-          <Stack spacing="sm" my="sm">
-            <Stack spacing={0}>
-              {props.fullPage ? (
-                <Title order={3}>{book.title}</Title>
-              ) : (
-                <Text weight={500}>{book.title}</Text>
+                <></>
               )}
-              <Text size="md">{book.author}</Text>
-            </Stack>
+
+              {!props.newBook && !props.removable ? (
+                !book.isCheckedOut ? (
+                  <Button variant="light" color="red" onClick={checkoutBook}>
+                    Check Out
+                  </Button>
+                ) : (
+                  <Button variant="light" color="green" onClick={returnBook}>
+                    Return
+                  </Button>
+                )
+              ) : (
+                <></>
+              )}
+
+              {props.newBook ? (
+                <Button variant="light" onClick={addBook} color="blue">
+                  Add to Library
+                </Button>
+              ) : (
+                <></>
+              )}
+
+              {props.removable ? (
+                <Button variant="light" color="red" onClick={removeBook}>
+                  Remove
+                </Button>
+              ) : (
+                <></>
+              )}
+            </Group>
             {book.isCheckedOut ? (
-              <Badge color="red" variant="light">
-                Checked Out
-              </Badge>
+              <>
+                <List spacing="xs">
+                  <List.Item
+                    key="dateCheckedOut"
+                    icon={
+                      <ThemeIcon color="orange" size={24} radius="xl">
+                        <IconBookUpload size={16} />
+                      </ThemeIcon>
+                    }
+                  >
+                    <Text>
+                      Date checked out:
+                      <b>
+                        {" "}
+                        {new Date(book.dateCheckedOut).toLocaleDateString()}
+                      </b>
+                    </Text>
+                  </List.Item>
+
+                  <List.Item
+                    key="dateReturnBy"
+                    icon={
+                      <ThemeIcon color="green" size={24} radius="xl">
+                        <IconBookDownload size={16} />
+                      </ThemeIcon>
+                    }
+                  >
+                    <Text>
+                      Date to return:{" "}
+                      <b> {new Date(book.dateReturnBy).toLocaleDateString()}</b>
+                    </Text>{" "}
+                  </List.Item>
+                </List>
+              </>
             ) : (
-              <Badge color="green" variant="light">
-                Available
-              </Badge>
+              <></>
             )}
-          </Stack>
-          <Stack justify="space-between" spacing="lg">
-            <Stack spacing={1} mb="xl">
-              <Text size="md" weight={500}>
-                Description
-              </Text>
-              <Text size="sm" color="dimmed">
-                {props.fullPage
-                  ? book.description
-                  : formatDescription(book.description, 30)}
-              </Text>
+          </Card.Section>
+          <Card.Section inheritPadding>
+            <Stack spacing="sm" my="sm">
+              <Stack spacing={0}>
+                {props.fullPage ? (
+                  <Title order={3}>{book.title}</Title>
+                ) : (
+                  <Text weight={500}>{book.title}</Text>
+                )}
+                <Text size="md">{book.author}</Text>
+              </Stack>
+              {book.isCheckedOut ? (
+                <Badge color="red" variant="light">
+                  Checked Out
+                </Badge>
+              ) : (
+                <Badge color="green" variant="light">
+                  Available
+                </Badge>
+              )}
             </Stack>
-          </Stack>
-        </Card.Section>
-      </Card>
+            <Stack justify="space-between" spacing="lg">
+              <Stack spacing={1} mb="xl">
+                <Text size="md" weight={500}>
+                  Description
+                </Text>
+                <Text size="sm" color="dimmed">
+                  {props.fullPage
+                    ? book.description
+                    : formatDescription(book.description, 30)}
+                </Text>
+              </Stack>
+            </Stack>
+          </Card.Section>
+        </Card>
+      ) : null}
     </MediaQuery>
   );
 }

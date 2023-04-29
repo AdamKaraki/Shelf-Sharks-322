@@ -61,7 +61,14 @@ export default function RemoveBooks(props) {
           wrap="wrap"
         >
           {books.map((book) => {
-            return <BookCard book={book} removable onRemove={onRemove} />;
+            return (
+              <BookCard
+                key={book.uuid}
+                book={book}
+                removable
+                onRemove={onRemove}
+              />
+            );
           })}
         </Flex>
       )}

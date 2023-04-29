@@ -10,44 +10,18 @@ export default function CheckOut(props) {
 
   useEffect(() => {
     axios.get(`${apiURL}/books`).then((response) => {
-      setBooks(response.data);
+      setBooks(response.data.filter((book) => book.isCheckedOut === false));
     });
   }, []);
 
-  const onCheckOut = (book) => {
-    // set book as checked in
-    book.isCheckedOut = false;
-
-    // update book in books array
-    setBooks(
-      books.map((existingBook) => {
-        if (existingBook.uuid === book.uuid) {
-          return book;
-        }
-        return existingBook;
-      })
-    );
-  };
-
   const onCheckout = (book) => {
-    // set book as checked out
-    book.isCheckedOut = true;
-
-    // update book in books array
+    // filter book out of books
     setBooks(
-      books.map((existingBook) => {
-        if (existingBook.uuid === book.uuid) {
-          return book;
-        }
-        return existingBook;
+      books.filter((existingBook) => {
+        return existingBook.uuid !== book.uuid;
       })
     );
   };
-
-  // Filter out checked-out books
-  const availableBooks = books.filter((book) => {
-    return !book.isCheckedOut;
-  });
 
   return (
     <Stack>
@@ -60,13 +34,9 @@ export default function CheckOut(props) {
         gap={{ base: "sm", sm: "lg" }}
         wrap="wrap"
       >
-        {availableBooks.map((book) => {
+        {books.map((book) => {
           return (
-            <BookCard
-              book={book}
-              onCheckOut={onCheckOut}
-              onCheckout={onCheckout}
-            />
+            <BookCard key={book.uuid} book={book} onCheckout={onCheckout} />
           );
         })}
       </Flex>

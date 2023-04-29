@@ -47,7 +47,15 @@ export default function AddBooks(props) {
         },
       })
       .then((res) => {
-        setBooks(res.data);
+        // set books one by one with slight delay
+        // for animation
+        // loop through books
+        res.data.forEach((book, index) => {
+          // set book with delay
+          setTimeout(() => {
+            setBooks((prevBooks) => [...prevBooks, book]);
+          }, 100 * index);
+        });
         setLoading(false);
       });
   };
@@ -84,7 +92,9 @@ export default function AddBooks(props) {
           wrap="wrap"
         >
           {books.map((book) => {
-            return <BookCard book={book} onAdd={onAdd} newBook />;
+            return (
+              <BookCard key={book.uuid} book={book} onAdd={onAdd} newBook />
+            );
           })}
         </Flex>
       )}
